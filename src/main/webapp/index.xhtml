@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <h:head>
+        <title>Spreadsheet Editor</title>
+    </h:head>
+    <h:body>
+        <ui:debug hotkey="x" />
+        <p:growl id="notifications" autoUpdate="true" showDetail="true" />
+
+        <h:form id="form">
+
+            <p:menubar>
+                <p:submenu label="Spreadsheet">
+                    <p:menuitem value="Save" target="_blank" actionListener="#{worksheet.save}" ajax="false" />
+                    <p:separator />
+                </p:submenu>
+                <p:submenu label="Help">
+                    <p:menuitem value="About" onclick="PF('aboutDialog').show();
+                            return(false);" />
+                </p:submenu>
+                <f:facet name="options">
+                    <p:ajaxStatus rendered="false">
+                        <f:facet name="default">
+                            <h:outputText value="Ready" />
+                        </f:facet>
+                        <f:facet name="start">
+                            <h:outputText value="Working in background" />
+                        </f:facet>
+                        <f:facet name="success">
+                            <h:outputText value="Saved" />
+                        </f:facet>
+                        <f:facet name="error">
+                            <h:outputText value="Error" />
+                        </f:facet>
+                    </p:ajaxStatus>
+                    <p:selectOneMenu rendered="#{worksheet.loaded}" value="#{worksheet.activeSheet}" style="width:200px">
+                        <p:ajax partialSubmit="true" update=":form"/>
+                        <f:selectItems value="#{worksheet.sheets}" />
+                    </p:selectOneMenu>
+                </f:facet>
+
+            </p:menubar>
+
+            <p:panel rendered="#{!worksheet.loaded}" style="padding:30px 0;text-align:center">
+                <h2>No spreadsheet loaded</h2>
+                <h3>You can load a spreadsheet by specifying it in the URL parameter as shown in the example below</h3>
+                <i>http://spreadsheeteditor.aspose.com/?url=http://www.example.com/Sample1.xlsx</i>
+            </p:panel>
+
+            <p:dataTable id="sheet" widgetVar="sheet" rendered="#{worksheet.loaded}" var="row" value="#{worksheet.rows}" selectionMode="single" editable="true" editMode="cell" resizableColumns="true" scrollable="true" rowKey="#{row.id}" style="width:#{50*worksheet.columns.size()}px">
+                <p:ajax event="rowSelect" listener="#{worksheet.onRowSelect}" />
+                <p:ajax event="cellEdit" listener="#{worksheet.onCellEdit}" partialSubmit="true" update=":form:sheet" />
+
+                <p:column style="text-align: right" width="20px">
+                    <h:outputText value="#{row.id + 1}" />
+                </p:column>
+
+                <c:forEach var="column" items="#{worksheet.columns}">
+                    <p:column headerText="#{column.name}" width="50px" styleClass="ui-editable-column">
+                        <p:cellEditor>
+                            <f:facet name="output">
+                                <h:outputText escape="false" value="#{row.cellsMap[column.name].html}" />
+                            </f:facet>
+                            <f:facet name="input">
+                                <p:inputText value="#{row.cellsMap[column.name]}" converter="cellEditorConverter" style="width:96%">
+                                    <f:passThroughAttribute name="data-columnId" value="#{column.id}" />
+                                    <f:passThroughAttribute name="data-rowId" value="${row.id}" />
+                                </p:inputText>
+                            </f:facet>
+                        </p:cellEditor>
+                        <f:passThroughAttribute name="colspan" value="#{row.cellsMap[column.name].colspan}" />
+                        <f:passThroughAttribute name="rowspan" value="#{row.cellsMap[column.name].rowspan}" />
+                    </p:column>
+                </c:forEach>
+
+            </p:dataTable>
+
+
+            <p:dialog widgetVar="aboutDialog" header="About" modal="true" style="text-align: center">
+                <h:graphicImage value="logo.jpg" />
+                <h3>Spreadsheet Editor</h3>
+                &#9400; Aspose 2002-2014. All Rights Reserved.
+            </p:dialog>
+
+            <p:contextMenu for="sheet" widgetVar="cMenu">
+                <p:menuitem value="Edit Cell" icon="ui-icon-search" onclick="PF('sheet').showCellEditor();return false;"/>
+                <p:submenu label="Rows and Columns" icon="ui-icon-refresh">
+                    <p:menuitem value="Add a Row above" action="#{worksheet.addRowAbove}" update=":form:sheet" />
+                    <p:menuitem value="Add a Row below" action="#{worksheet.addRowBelow}" update=":form:sheet" />
+                    <p:menuitem value="Delete Row" action="#{worksheet.deleteRow}" update=":form:sheet" />
+                </p:submenu>
+                <p:menuitem value="Hide Menu" icon="ui-icon-close" onclick="PF('cMenu').hide();return(false);"/>
+            </p:contextMenu>
+
+        </h:form>
+    </h:body>
+</html>
+
