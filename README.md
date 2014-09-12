@@ -4,8 +4,8 @@ Spreadsheet Editor is a web application that can view and edit Excel workbook do
 
 ## Features
 
-* View a spreadsheet.
 * Open a spreadsheet from any public URL.
+* View a spreadsheet.
 * View formated text in Cells.
 * Edit cell values.
 * Edit cell formulas.
@@ -16,7 +16,7 @@ Spreadsheet Editor is a web application that can view and edit Excel workbook do
 
 ## Upcoming features
 
-Aspose.Cells for Java is very rich library and can be used to edit all aspects of an Excel file. Spreadsheet Editor is currently using only a small subset of Aspose.Cells for Java and will expand in future releases. Here is a list of some prominent features that are expected in next versions of Spreadsheet Editor.
+Aspose.Cells for Java is very rich library and can be used to edit all aspects of an Excel file. Spreadsheet Editor is currently using only a small subset of Aspose.Cells for Java features and will expand in future releases. Here is a list of some prominent features that are expected in next versions of Spreadsheet Editor:
 
 * Add and delete columns.
 * Start with an empty spreadsheet.
