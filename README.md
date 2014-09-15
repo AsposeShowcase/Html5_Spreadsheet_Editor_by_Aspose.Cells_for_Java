@@ -2,6 +2,8 @@
 
 Spreadsheet Editor is a web application that can view and edit Excel workbook documents. It highlights commonly used features of [Aspose.Cells for Java](http://www.aspose.com/java/excel-component.aspx) and demonstrates how to use them to create, manipulate and render a spreadsheet.
 
+![](http://www.aspose.com/blogs/wp-content/uploads/2014/09/2.png)
+
 ## Features
 
 * Open a spreadsheet from any public URL.
@@ -34,6 +36,8 @@ The project build process is managed using Maven. Run the following command to p
 ```
 mvn package
 ```
+
+## Aspose License
 
 In addition to building from source code. You may need to add the license file for Aspose.Cells for Java component. By default, it will try to load `Aspose.Total.Java.lic` file from `src/main/resources/com/aspose/spreadsheeteditor` directory. You can change the default behavior by editing `WorksheetView.init()` method.
 
