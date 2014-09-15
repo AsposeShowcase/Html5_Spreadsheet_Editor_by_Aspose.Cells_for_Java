@@ -39,7 +39,9 @@ mvn package
 
 ## Aspose License
 
-In addition to building from source code. You may need to add the license file for Aspose.Cells for Java component. By default, it will try to load `Aspose.Total.Java.lic` file from `src/main/resources/com/aspose/spreadsheeteditor` directory. You can change the default behavior by editing `WorksheetView.init()` method.
+The project works without a license, with limitations. To remove limitations, you can acquire a free [temporary license](http://www.aspose.com/corporate/purchase/temporary-license.aspx) or [buy a full license](http://www.aspose.com/purchase/default.aspx).
+
+By default, it will try to load `Aspose.Total.Java.lic` file from `src/main/resources/com/aspose/spreadsheeteditor` directory. Just copy the license file to this directory. You can change the default behavior by editing `WorksheetView.init()` method.
 
 ## Deployment
 
