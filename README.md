@@ -1,6 +1,6 @@
 ## Html5 Spreadsheet Editor by Aspose for Java
 
-Html5 Spreadsheet Editor by Aspose for Java is a web application that can view and edit Excel workbook documents. It highlights commonly used features of [Aspose.Cells for Java](http://www.aspose.com/java/excel-component.aspx) and demonstrates how to use them to create, manipulate and render a spreadsheet.
+Html5 Spreadsheet Editor is a web application that can view and edit Excel workbook documents. It highlights commonly used features of [Aspose.Cells for Java](http://www.aspose.com/java/excel-component.aspx) and demonstrates how to use them to create, manipulate and render a spreadsheet.
 
 ![](http://www.aspose.com/blogs/wp-content/uploads/2014/09/2.png)
 
@@ -18,7 +18,7 @@ Html5 Spreadsheet Editor by Aspose for Java is a web application that can view a
 
 ## Upcoming features
 
-Aspose.Cells for Java is very rich library and can be used to edit all aspects of an Excel file. Spreadsheet Editor is currently using only a small subset of Aspose.Cells for Java features and will expand in future releases. Here is a list of some prominent features that are expected in next versions of Spreadsheet Editor:
+Aspose.Cells for Java is very rich library and can be used to edit all aspects of an Excel file. Html5 Spreadsheet Editor is currently using only a small subset of Aspose.Cells for Java features and will expand in future releases. Here is a list of some prominent features that are expected in next versions of Spreadsheet Editor:
 
 * Add and delete columns.
 * Start with an empty spreadsheet.
