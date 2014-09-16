@@ -1,6 +1,6 @@
 ## Spreadsheet Editor
 
-Spreadsheet Editor is a web application that can view and edit Excel workbook documents. It highlights commonly used features of [Aspose.Cells for Java](http://www.aspose.com/java/excel-component.aspx) and demonstrates how to use them to create, manipulate and render a spreadsheet.
+Html5 Spreadsheet Editor by Aspose for Java is a web application that can view and edit Excel workbook documents. It highlights commonly used features of [Aspose.Cells for Java](http://www.aspose.com/java/excel-component.aspx) and demonstrates how to use them to create, manipulate and render a spreadsheet.
 
 ![](http://www.aspose.com/blogs/wp-content/uploads/2014/09/2.png)
 
