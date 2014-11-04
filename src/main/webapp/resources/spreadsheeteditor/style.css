@@ -1,0 +1,14 @@
+.ui-datatable .ui-cell-editor,
+.ui-datatable .ui-cell-editor-output
+{
+    display:block;
+    height: 100%;
+    width: 100%;
+}
+
+.ui-datatable td.ui-editable-column
+{
+    margin: 0;
+    padding: 0;
+}
+

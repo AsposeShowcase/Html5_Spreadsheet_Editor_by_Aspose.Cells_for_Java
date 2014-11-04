@@ -26,16 +26,16 @@ public class CellConverter implements Converter {
         int columnId = (Integer) ((ValueExpression) component.getPassThroughAttributes().get("data-columnId")).getValue(context.getELContext());
         int rowId = (Integer) ((ValueExpression) component.getPassThroughAttributes().get("data-rowId")).getValue(context.getELContext());
 
-        Cell.Builder builder = new Cell.Builder().setColumnId(columnId).setRowId(rowId);
-        if (value.startsWith("=")) {
-            builder.setFormula(value);
+        Cell cell = new Cell().setColumnId(columnId).setRowId(rowId);
+        if (value.trim().startsWith("=")) {
+            cell.setFormula(value.trim());
         } else {
-            builder.setValue(value);
+            cell.setValue(value);
         }
 
 //        worksheet.setCell(columnId, rowId, builder.build());
 //        RequestContext.getCurrentInstance().update(":form:sheet");
-        return builder.build();
+        return cell;
     }
 
     @Override

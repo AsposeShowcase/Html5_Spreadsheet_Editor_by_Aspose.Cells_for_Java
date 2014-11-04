@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.aspose.spreadsheeteditor;
 
 import java.io.Serializable;
@@ -18,7 +13,8 @@ public class Column implements Serializable {
     private String name;
     private String header;
     private String property;
-
+    private int width;
+    
     public Column(int id, String name) {
         this.id = id;
         this.name = this.header = this.property = name;
@@ -44,4 +40,12 @@ public class Column implements Serializable {
         return name;
     }
 
+    public int getWidth() {
+        return width;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
 }
+
