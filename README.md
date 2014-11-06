@@ -18,9 +18,13 @@ You can open files using one of the following methods.
 
 To upload a file form local computer, Click `File`->`Open from Computer` to open the `Browser` dialog. Go to your desired location of file and select it. Click `Open`. The is loaded in the editor.
 
+<img src="https://cloud.githubusercontent.com/assets/7696899/4933472/81814b7e-6597-11e4-849c-6a6e79a88bc9.png" width="50%" align="center" />
+
 #### Load files from Dropbox
 
 To open file from Dropbox, Click `File`->`Open from Dropbox` to open Dropbox file chooser. If you are not already signed-in to Dropbox, it will require you to signin to your Dropbox account. Choose your desired file from Dropbox folder and click `Choose` at the bottom. Your selected file will be opened from Dropbox.
+
+<img src="https://cloud.githubusercontent.com/assets/7696899/4933564/78323708-6598-11e4-9c15-dd89c0b78b5f.png" width="50%" />
 
 #### Load file from a URL
 
