@@ -56,34 +56,18 @@ Your web browser does not support IFRAMEs
 </iframe>
 ```
 
-## Features
-
-* Open a spreadsheet from any public URL.
-* View a spreadsheet.
-* View formated text in Cells.
-* Edit cell values.
-* Edit cell formulas.
-* Add and delete rows.
-* Show list of available worksheets.
-* Switch between worksheets.
-* Download the modified spreadsheet document.
-
-## Upcoming features
-
-Aspose.Cells for Java is very rich library and can be used to edit all aspects of an Excel file. Html5 Spreadsheet Editor is currently using only a small subset of Aspose.Cells for Java features and will expand in future releases. Here is a list of some prominent features that are expected in next versions of Spreadsheet Editor:
-
-* Add and delete columns.
-* Start with an empty spreadsheet.
-* Upload file for editing.
-* Edit text formating.
-* View and edit cell styles.
-* View merged cells.
-* Merge and unmerge cells.
-* Add and delete sheets.
-
 ## Setup
 
-The project build process is managed using Maven. Run the following command to prepare a WAR file.
+It is very easy to manage the project using NetBeans. 
+
+1. Download the source code.
+2. Open the project in NetBeans.
+3. Click `Run`
+4. Select `Glassfish` server as Application Server.
+
+![](https://cloud.githubusercontent.com/assets/7696899/4933205/d49e9b94-6593-11e4-879d-5ef39755a232.png)
+
+The project build process is managed using Maven. So you can prepare a WAR file from command line without any IDE. Use the following command to generate a WAR for deployment. The documentation of corresponding application server will help you how to deploy the generated WAR and its dependencies.
 
 ```
 mvn package
