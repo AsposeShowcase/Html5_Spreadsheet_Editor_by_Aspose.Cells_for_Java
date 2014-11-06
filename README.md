@@ -46,6 +46,16 @@ Adding and removing rows is very easy. Each row starts with a number which is th
 
 Microsoft Excel allows multiple sheets in a single file. HTML5 Spreadsheet Editor allows you to edit and switch between sheets. At the top right-hand corner there is a drop-down list of sheets. The selected sheet is the one which opened by the editor. To switch to another sheet, select it from the list. The plus `+` button adds a new sheet, and minus `-` button deletes the selected sheet.
 
+### Embed Anywhere
+
+You can embed HTML5 Spreadsheet Editor in any website of your choice using IFRAME. Here is an example code:
+
+```<
+iframe src="http://spreadsheet-editor.aspose.com/?url=http://example.com/Sample.xlsx" width="800" height="600">
+Your web browser does not support IFRAMEs
+</iframe>
+```
+
 ## Features
 
 * Open a spreadsheet from any public URL.
