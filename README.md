@@ -22,6 +22,14 @@ Files can be directly opened from URLs. This allows you to edit any publicly ava
 
 `http://spreadsheet-editor.aspose.com/?url=http://example.com/Sample.xlsx`
 
+### Create new files
+
+To create a new empty spreadsheet click `New` in `File` menu.
+
+### Saving files
+
+After editing files, you will want to save those changes. The editor allows you to save the modified files to local computer. To save the files click `File` and than click `Save`. The modified file will be available for download.
+
 ### Supported formats
 
 HTML5 Spreadsheet Editor supports XLS, XLSX, XLSM, XLSB, XLTX, SpreadsheetML, CVS and OpenDocument Spreadsheet files.
