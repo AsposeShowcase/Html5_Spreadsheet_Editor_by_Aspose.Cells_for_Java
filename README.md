@@ -38,10 +38,12 @@ Files can be directly opened from URLs. This allows you to edit any publicly ava
 
 To create a new empty spreadsheet click `New` in `File` menu.
 
+<img src="https://cloud.githubusercontent.com/assets/7696899/4933841/811669d6-659b-11e4-9f43-49d8d22564b4.PNG" width="50%" />
+
 ### Saving files
 
 After editing files, you will want to save those changes. The editor allows you to save the modified files to local computer. To save the files click `File` and than click `Save`. The modified file will be available for download.
-
+https://cloud.githubusercontent.com/assets/7696899/4933841/811669d6-659b-11e4-9f43-49d8d22564b4.PNG
 ### Supported formats
 
 HTML5 Spreadsheet Editor supports following formats:
