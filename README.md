@@ -14,9 +14,15 @@ You can open files using one of the following methods.
 * Load files stored in online Dropbox storage
 * Load file from a URL
 
+#### Upload file from local computer
+
 To upload a file form local computer, Click `File`->`Open from Computer` to open the `Browser` dialog. Go to your desired location of file and select it. Click `Open`. The is loaded in the editor.
 
+#### Load files from Dropbox
+
 To open file from Dropbox, Click `File`->`Open from Dropbox` to open Dropbox file chooser. If you are not already signed-in to Dropbox, it will require you to signin to your Dropbox account. Choose your desired file from Dropbox folder and click `Choose` at the bottom. Your selected file will be opened from Dropbox.
+
+#### Load file from a URL
 
 Files can be directly opened from URLs. This allows you to edit any publicly available file on Internet. To open the file append `?url=location` parameter with the value of your desired location while loading the editor.
 
