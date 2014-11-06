@@ -58,10 +58,10 @@ Your web browser does not support IFRAMEs
 
 ## Setup
 
-It is very easy to manage the project using NetBeans. 
+It is very easy to manage the project using [NetBeans IDE](https://netbeans.org/). 
 
 1. Download the source code.
-2. Open the project in NetBeans.
+2. Open the project in NetBeans IDE.
 3. Click `Run`
 4. Select `Glassfish` server as Application Server.
 
