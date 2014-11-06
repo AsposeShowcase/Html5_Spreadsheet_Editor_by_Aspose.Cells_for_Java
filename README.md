@@ -18,7 +18,7 @@ You can open files using one of the following methods.
 
 To upload a file form local computer, Click `File`->`Open from Computer` to open the `Browser` dialog. Go to your desired location of file and select it. Click `Open`. The is loaded in the editor.
 
-<img src="https://cloud.githubusercontent.com/assets/7696899/4933472/81814b7e-6597-11e4-849c-6a6e79a88bc9.png" width="50%" align="center" />
+<img src="https://cloud.githubusercontent.com/assets/7696899/4933472/81814b7e-6597-11e4-849c-6a6e79a88bc9.png" width="50%" />
 
 #### Load files from Dropbox
 
@@ -31,6 +31,8 @@ To open file from Dropbox, Click `File`->`Open from Dropbox` to open Dropbox fil
 Files can be directly opened from URLs. This allows you to edit any publicly available file on Internet. To open the file append `?url=location` parameter with the value of your desired location while loading the editor.
 
 `http://spreadsheet-editor.aspose.com/?url=http://example.com/Sample.xlsx`
+
+<img src="https://cloud.githubusercontent.com/assets/7696899/4933769/bff7155c-659a-11e4-9a2d-ec7279b25d6a.PNG" width="50%" />
 
 ### Create new files
 
