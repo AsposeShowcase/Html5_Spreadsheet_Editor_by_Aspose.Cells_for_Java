@@ -1,8 +1,30 @@
 ## Html5 Spreadsheet Editor by Aspose for Java
 
-Html5 Spreadsheet Editor is a web application that can view and edit Excel workbook documents. It highlights commonly used features of [Aspose.Cells for Java](http://www.aspose.com/java/excel-component.aspx) and demonstrates how to use them to create, manipulate and render a spreadsheet.
+Html5 Spreadsheet Editor is a web application that can view and edit Microsoft Excel files. It highlights commonly used features of [Aspose.Cells for Java](http://www.aspose.com/java/excel-component.aspx) and demonstrates how to use them to create, manipulate and render a spreadsheet in your Java application.
 
-![](http://www.aspose.com/blogs/wp-content/uploads/2014/09/2.png)
+![](https://cloud.githubusercontent.com/assets/7696899/4931559/f0dace90-657a-11e4-97c4-2632118fa552.png)
+
+## Highlights
+
+### Opening files
+
+You can open files using one of the following methods.
+
+* Upload file from local computer
+* Load files stored in online Dropbox storage
+* Load file from a URL
+
+To upload a file form local computer, Click `File`->`Open from Computer` to open the `Browser` dialog. Go to your desired location of file and select it. Click `Open`. The is loaded in the editor.
+
+To open file from Dropbox, Click `File`->`Open from Dropbox` to open Dropbox file chooser. If you are not already signed-in to Dropbox, it will require you to signin to your Dropbox account. Choose your desired file from Dropbox folder and click `Choose` at the bottom. Your selected file will be opened from Dropbox.
+
+Files can be directly opened from URLs. This allows you to edit any publicly available file on Internet. To open the file append `?url=location` parameter with the value of your desired location while loading the editor.
+
+`http://spreadsheet-editor.aspose.com/?url=http://example.com/Sample.xlsx`
+
+### Supported formats
+
+HTML5 Spreadsheet Editor supports XLS, XLSX, XLSM, XLSB, XLTX, SpreadsheetML, CVS and OpenDocument Spreadsheet files.
 
 ## Features
 
