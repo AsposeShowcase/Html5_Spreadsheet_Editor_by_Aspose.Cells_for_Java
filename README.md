@@ -38,7 +38,16 @@ After editing files, you will want to save those changes. The editor allows you 
 
 ### Supported formats
 
-HTML5 Spreadsheet Editor supports XLS, XLSX, XLSM, XLSB, XLTX, SpreadsheetML, CVS and OpenDocument Spreadsheet files.
+HTML5 Spreadsheet Editor supports following formats:
+
+* XLS
+* XLSX
+* XLSM
+* XLSB
+* XLTX
+* SpreadsheetML
+* CVS
+* OpenDocument
 
 ### Editing Cells
 
