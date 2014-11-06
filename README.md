@@ -34,6 +34,18 @@ After editing files, you will want to save those changes. The editor allows you 
 
 HTML5 Spreadsheet Editor supports XLS, XLSX, XLSM, XLSB, XLTX, SpreadsheetML, CVS and OpenDocument Spreadsheet files.
 
+### Editing Cells
+
+You can edit any cell by a double-click. When you double-click a cell, it switches to edit-mode. To cancel editing, press the ESC key. To swich to normal mode, press ENTER. You can also press TAB to move to the next cell. You can specify static text and numbers. Formulas are supported too. To enter a formula, start the cell value with an equal sign (=). For example `=SUM(A1:A5)`. All formulas supported by Microsoft Excel are supported by HTML5 Spreadsheet Editor too.
+
+### Rows and Columns
+
+Adding and removing rows is very easy. Each row starts with a number which is the row ID. Click on a row ID to select the entire row. Right-click and click `Add a Row Below` to add a new row right below the selected row. You can remove a row by following same method and clicking `Delete Row`.
+
+### Working with Sheets
+
+Microsoft Excel allows multiple sheets in a single file. HTML5 Spreadsheet Editor allows you to edit and switch between sheets. At the top right-hand corner there is a drop-down list of sheets. The selected sheet is the one which opened by the editor. To switch to another sheet, select it from the list. The plus `+` button adds a new sheet, and minus `-` button deletes the selected sheet.
+
 ## Features
 
 * Open a spreadsheet from any public URL.
