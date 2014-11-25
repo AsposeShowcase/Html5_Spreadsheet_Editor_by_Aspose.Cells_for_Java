@@ -83,9 +83,9 @@ Adding and removing rows is very easy. Each row starts with a number which is th
 
 ### Working with Sheets
 
-Microsoft Excel allows multiple sheets in a single file. HTML5 Spreadsheet Editor allows you to edit and switch between sheets. At the top right-hand corner there is a drop-down list of sheets. The selected sheet is the one which opened by the editor. To switch to another sheet, select it from the list. The plus `+` button *adds a new sheet*, and minus `-` button *deletes the selected sheet*.
+Microsoft Excel allows multiple sheets in a single file. HTML5 Spreadsheet Editor allows you to edit and switch between sheets. At the top right-hand corner there is a drop-down list of sheets. The selected sheet is the one which opened by the editor. To switch to another sheet, select it from the list. The plus `+` button **adds a new sheet**, and minus `-` button **deletes the selected sheet**.
 
-To *rename existing sheet*, click on the sheet name in the text box to edit it. When you are finished editing the name, press ENTER key, or click anywhere outside the box. The sheet will be renamed.
+To **rename existing sheet**, click on the sheet name in the text box to edit it. When you are finished editing the name, press ENTER key, or click anywhere outside the box. The sheet will be renamed.
 
 <img src="https://cloud.githubusercontent.com/assets/7696899/4935471/4ef22e88-65ad-11e4-8c64-88f01d777986.png" width="50%" />
 
