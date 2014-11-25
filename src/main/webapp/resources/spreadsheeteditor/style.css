@@ -1,3 +1,7 @@
+body {
+    margin: 0;
+}
+
 .ui-datatable .ui-cell-editor,
 .ui-datatable .ui-cell-editor-output
 {
@@ -10,5 +14,25 @@
 {
     margin: 0;
     padding: 0;
+}
+
+.ui-datatable .ui-datatable-data .ui-datatable-odd
+{
+    background-color: #ffffff;
+}
+
+.ui-datatable .ui-datatable-data .ui-cell-editor-input textarea,
+.ui-datatable .ui-datatable-data .ui-cell-editor-input input
+{
+    width: 100%;
+    border: none;
+    border-radius: 0;
+    padding: 0;
+    box-shadow: none;
+}
+
+.ui-state-highlight.ui-cell-editing
+{
+    background: none;
 }
 

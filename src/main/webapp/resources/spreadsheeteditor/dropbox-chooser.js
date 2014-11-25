@@ -1,4 +1,4 @@
-function onDropboxChooserClicked() {
+function showDropboxChooser() {
     if (!Dropbox.isBrowserSupported()) {
         alert("Your browser is not supported to use this feature.");
         return false;
@@ -11,7 +11,7 @@ function onDropboxChooserClicked() {
             PF('dropboxChooserSelectedUrlApply').jq.trigger('click');
         },
         linkType: "direct",
-        extensions: ['.xlsx', '.xlx', '.ods'],
+        extensions: ['.xlsx', '.xls', '.ods'],
         multiselect: false
     });
 

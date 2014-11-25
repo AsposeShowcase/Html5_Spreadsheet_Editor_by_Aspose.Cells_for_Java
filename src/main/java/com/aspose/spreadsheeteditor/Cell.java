@@ -11,6 +11,9 @@ public class Cell implements Serializable {
     private int rowId;
     private int colspan = 0;
     private int rowspan = 0;
+    private boolean bold;
+    private boolean italic;
+    private boolean underline;
 
     public void init() {
     }
@@ -77,4 +80,33 @@ public class Cell implements Serializable {
         this.rowspan = rowspan;
         return this;
     }
+
+    public boolean isBold() {
+        return bold;
+    }
+
+    public Cell setBold(boolean bold) {
+        this.bold = bold;
+        return this;
+    }
+
+    public boolean isItalic() {
+        return italic;
+    }
+
+    public Cell setItalic(boolean italic) {
+        this.italic = italic;
+        return this;
+    }
+
+    public boolean isUnderline() {
+        return underline;
+    }
+
+    public Cell setUnderline(boolean underline) {
+        this.underline = underline;
+        return this;
+    }
+
 }
+

@@ -17,8 +17,8 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.CellEditEvent;
+import org.primefaces.event.ColumnResizeEvent;
 import org.primefaces.event.FileUploadEvent;
-import org.primefaces.event.SelectEvent;
 
 @Named(value = "worksheet")
 @ViewScoped
@@ -29,28 +29,29 @@ public class WorksheetView implements Serializable {
     private String sourceUrl;
     private ArrayList<Row> cachedRows;
     private ArrayList<Column> cachedColumns;
-    private Row selectedRow;
+    private int currentColumnId;
+    private int currentRowId;
+    private boolean boldOptionEnabled;
+
+    static {
+        try (InputStream i = WorksheetView.class.getResourceAsStream("Aspose.Total.Java.lic")) {
+            new com.aspose.cells.License().setLicense(i);
+        } catch (IOException | com.aspose.cells.CellsException x) {
+            x.printStackTrace();
+        }
+    }
 
     @PostConstruct
     private void init() {
-        if (!com.aspose.cells.License.isLicenseSet()) {
-            try (InputStream i = WorksheetView.class.getResourceAsStream("Aspose.Total.Java.lic")) {
-                new com.aspose.cells.License().setLicense(i);
-            } catch (IOException | com.aspose.cells.CellsException x) {
-                x.printStackTrace();
-            }
-        }
-
-        String u = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("url");
-        if (u != null) {
+        String requestedSourceUrl = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("url");
+        if (requestedSourceUrl != null) {
             try {
-                this.sourceUrl = new URL(u).toString();
+                this.sourceUrl = new URL(requestedSourceUrl).toString();
+                this.loadFromUrl();
             } catch (MalformedURLException x) {
-                sendMessageDialog("The specified URL is invalid", u);
+                sendMessageDialog("The specified URL is invalid", requestedSourceUrl);
             }
         }
-
-        this.loadFromUrl();
     }
 
     public String getSourceUrl() {
@@ -69,11 +70,29 @@ public class WorksheetView implements Serializable {
         return null;
     }
 
+    /**
+     * Switch to `name`d sheet. If there does not exist any sheet with the given
+     * name, the active sheet is renamed to the given name.
+     *
+     * The rule is derived from the following use-case.
+     *
+     * If the user select a sheet from drop-down menu, this means that the sheet
+     * already exist. So we can switch to that sheet. If the sheet does not
+     * exist, we can say that the user has not selected it from drop-down but
+     * directly modified the name of existing in the input text box.
+     *
+     * @param name Worksheet name
+     */
     public void setActiveSheet(String name) {
-        int i = getAsposeWorkbook().getWorksheets().get(name).getIndex();
-        getAsposeWorkbook().getWorksheets().setActiveSheetIndex(i);
-        this.cachedColumns = null;
-        this.cachedRows = null;
+        com.aspose.cells.Worksheet w = getAsposeWorkbook().getWorksheets().get(name);
+        if (w != null) {
+            int i = w.getIndex();
+            getAsposeWorkbook().getWorksheets().setActiveSheetIndex(i);
+        } else {
+            getAsposeWorksheet().setName(name);
+        }
+
+        purge();
     }
 
     public boolean isLoaded() {
@@ -90,8 +109,7 @@ public class WorksheetView implements Serializable {
 
     public void loadBlank() {
         this.asposeWorkbook = new com.aspose.cells.Workbook();
-        this.cachedColumns = null;
-        this.cachedRows = null;
+        purge();
     }
 
     public void save() {
@@ -226,30 +244,26 @@ public class WorksheetView implements Serializable {
 
         try {
 //            com.aspose.cells.Color cellBgColor = asposeCell.getStyle().getBackgroundColor();
-//            style.append("background-color: rgb(")
-//                    .append(cellBgColor.getR() & 0xFF)
-//                    .append(",")
-//                    .append(cellBgColor.getG() & 0xFF)
-//                    .append(",")
-//                    .append(cellBgColor.getB() & 0xFF)
-//                    .append(");");
-//            com.aspose.cells.Color cellFgColor = asposeCell.getStyle().getForegroundColor();
-//            style.append("color: rgb(")
-//                    .append(cellFgColor.getR())
-//                    .append(",")
-//                    .append(cellFgColor.getG())
-//                    .append(",")
-//                    .append(cellFgColor.getB())
-//                    .append(");");
+//            style.append("background-color:")
+//                    .append(asposeColorToCssColor(cellBgColor, false))
+//                    .append(";");
+
+            com.aspose.cells.Color cellFgColor = asposeCell.getStyle().getForegroundColor();
+            style.append("background-color:")
+                    .append(asposeColorToCssColor(cellFgColor, false))
+                    .append(";");
+
             com.aspose.cells.Font font = asposeCell.getStyle().getFont();
             style.append("font-family: '").append(font.getName()).append("';");
 
             if (asposeCell.getStyle().getFont().isItalic()) {
                 style.append("font-style: italic;");
+                result.setItalic(true);
             }
 
             if (asposeCell.getStyle().getFont().isBold()) {
                 style.append("font-weight: bold;");
+                result.setBold(true);
             }
 
             switch (asposeCell.getStyle().getFont().getUnderline()) {
@@ -271,6 +285,7 @@ public class WorksheetView implements Serializable {
                 case com.aspose.cells.FontUnderlineType.WAVY_HEAVY:
                 case com.aspose.cells.FontUnderlineType.WORDS:
                     style.append("text-decoration: underline;");
+                    result.setUnderline(true);
                     break;
             }
 
@@ -336,13 +351,9 @@ public class WorksheetView implements Serializable {
                     .append("-o-transform: rotate(-").append(cellRotationAngle).append("deg);");
 
             com.aspose.cells.Color cellTextColor = asposeCell.getStyle().getFont().getColor();
-            style.append("color: rgb(")
-                    .append(cellTextColor.getR() & 0xFF)
-                    .append(",")
-                    .append(cellTextColor.getG() & 0xFF)
-                    .append(",")
-                    .append(cellTextColor.getB() & 0xFF)
-                    .append(");");
+            style.append("color:")
+                    .append(asposeColorToCssColor(cellTextColor, true))
+                    .append(";");
 
         } catch (Exception x) {
             sendMessage("Cell style error", x.getMessage());
@@ -360,6 +371,30 @@ public class WorksheetView implements Serializable {
         }
 
         return result;
+    }
+
+    private String asposeColorToCssColor(com.aspose.cells.Color color, boolean emptyIsBlack) {
+        int r, g, b;
+
+        if (color.isEmpty()) {
+            if (emptyIsBlack) {
+                r = g = b = 0;
+            } else {
+                r = g = b = 255;
+            }
+        } else {
+            r = color.getR() & 0xFF;
+            g = color.getG() & 0xFF;
+            b = color.getB() & 0xFF;
+        }
+
+        return new StringBuffer("rgb(")
+                .append(r & 0xFF)
+                .append(",")
+                .append(g & 0xFF)
+                .append(",")
+                .append(b & 0xFF)
+                .append(")").toString();
     }
 
     private void cacheRows() {
@@ -433,11 +468,38 @@ public class WorksheetView implements Serializable {
         return this.cachedRows;
     }
 
+    public void applyCellFormating() {
+
+    }
+
+    public int getCurrentColumnId() {
+        return currentColumnId;
+    }
+
+    public void setCurrentColumnId(int currentColumnId) {
+        this.currentColumnId = currentColumnId;
+    }
+
+    public int getCurrentRowId() {
+        return currentRowId;
+    }
+
+    public void setCurrentRowId(int currentRowId) {
+        this.currentRowId = currentRowId;
+    }
+
+    public boolean isBoldOptionEnabled() {
+        return boldOptionEnabled;
+    }
+
+    public void setBoldOptionEnabled(boolean boldOptionEnabled) {
+        this.boldOptionEnabled = boldOptionEnabled;
+    }
+
     public void onFileUpload(FileUploadEvent e) {
         try (InputStream i = e.getFile().getInputstream()) {
             this.asposeWorkbook = new Workbook(i);
-            this.cachedColumns = null;
-            this.cachedRows = null;
+            purge();
         } catch (IOException iox) {
             sendMessage("Could not read the file from source", e.getFile().getFileName());
         } catch (Exception x) {
@@ -450,8 +512,7 @@ public class WorksheetView implements Serializable {
             try {
                 int i = getAsposeWorkbook().getWorksheets().add();
                 getAsposeWorkbook().getWorksheets().setActiveSheetIndex(i);
-                this.cachedColumns = null;
-                this.cachedRows = null;
+                purge();
             } catch (com.aspose.cells.CellsException cx) {
                 sendMessage("New Worksheet", cx.getMessage());
             }
@@ -467,8 +528,7 @@ public class WorksheetView implements Serializable {
                     int j = getAsposeWorkbook().getWorksheets().add();
                     getAsposeWorkbook().getWorksheets().setActiveSheetIndex(j);
                 }
-                this.cachedColumns = null;
-                this.cachedRows = null;
+                purge();
             } catch (com.aspose.cells.CellsException cx) {
                 sendMessage("Could not remove sheet", cx.getMessage());
             }
@@ -488,64 +548,105 @@ public class WorksheetView implements Serializable {
             }
             this.cachedRows = null;
 
-            sendMessage("Cell Changed", String.format("Old: %s New: %s", oldCell.getValue(), newCell.getValue()));
-
+//            sendMessage("Cell Changed", String.format("Old: %s New: %s", oldCell.getValue(), newCell.getValue()));
         } catch (com.aspose.cells.CellsException x) {
             x.printStackTrace();
         }
     }
 
-    public void onRowSelect(SelectEvent e) {
-        this.selectedRow = (Row) e.getObject();
-        sendMessage("Row selected", String.valueOf(this.selectedRow.getId()));
+    public void onColumnResize(ColumnResizeEvent e) {
+        int columnId = com.aspose.cells.CellsHelper.columnNameToIndex(e.getColumn().getHeaderText());
+        if (isLoaded()) {
+            try {
+                getAsposeWorksheet().getCells().setColumnWidthPixel(columnId, e.getWidth());
+            } catch (com.aspose.cells.CellsException cx) {
+                sendMessage("Could not resize column", cx.getMessage());
+            }
+            purge();
+        }
     }
 
     public void addRowAbove() {
-        if (this.selectedRow == null) {
-            sendMessage("No row selected", null);
+        if (getCurrentRowId() < 0) {
+            sendMessage("No cell selected", null);
             return;
         }
 
         try {
-            getAsposeWorksheet().getCells().insertRows(this.selectedRow.getId(), 1, true);
+            getAsposeWorksheet().getCells().insertRows(getCurrentRowId(), 1, true);
             this.cachedRows = null;
-
-            sendMessage("Added new above", String.valueOf(this.selectedRow.getId()));
         } catch (com.aspose.cells.CellsException cx) {
-            cx.printStackTrace();
+            sendMessage("Could not add row", cx.getMessage());
         }
     }
 
     public void addRowBelow() {
-        if (this.selectedRow == null) {
-            sendMessage("No row selected", null);
+        if (getCurrentRowId() < 0) {
+            sendMessage("No cell selected", null);
             return;
         }
 
         try {
-            getAsposeWorksheet().getCells().insertRows(this.selectedRow.getId() + 1, 1, true);
+            getAsposeWorksheet().getCells().insertRows(getCurrentRowId() + 1, 1, true);
             this.cachedRows = null;
-
-            sendMessage("Added new below", String.valueOf(this.selectedRow.getId()));
         } catch (com.aspose.cells.CellsException cx) {
-            cx.printStackTrace();
+            sendMessage("Could not add row", cx.getMessage());
         }
-
     }
 
     public void deleteRow() {
-        if (this.selectedRow == null) {
-            sendMessage("No row selected", null);
+        if (getCurrentRowId() < 0) {
+            sendMessage("No cell selected", null);
             return;
         }
 
         try {
-            getAsposeWorksheet().getCells().deleteRows(this.selectedRow.getId(), 1, true);
+            getAsposeWorksheet().getCells().deleteRows(getCurrentRowId(), 1, true);
             this.cachedRows = null;
-
-            sendMessage("Deleted row", String.valueOf(this.selectedRow.getId()));
         } catch (com.aspose.cells.CellsException cx) {
-            cx.printStackTrace();
+            sendMessage("Could not delete row", cx.getMessage());
+        }
+    }
+
+    public void addColumnBefore() {
+        if (getCurrentColumnId() < 0) {
+            sendMessage("No cell selected", null);
+            return;
+        }
+
+        try {
+            getAsposeWorksheet().getCells().insertColumns(getCurrentColumnId(), 1, true);
+            purge();
+        } catch (com.aspose.cells.CellsException cx) {
+            sendMessage("Could not add column", cx.getMessage());
+        }
+    }
+
+    public void addColumnAfter() {
+        if (getCurrentColumnId() < 0) {
+            sendMessage("No cell selected", null);
+            return;
+        }
+
+        try {
+            getAsposeWorksheet().getCells().insertColumns(getCurrentColumnId() + 1, 1, true);
+            purge();
+        } catch (com.aspose.cells.CellsException cx) {
+            sendMessage("Could not add column", cx.getMessage());
+        }
+    }
+
+    public void deleteColumn() {
+        if (getCurrentColumnId() < 0) {
+            sendMessage("No cell selected", null);
+            return;
+        }
+
+        try {
+            getAsposeWorksheet().getCells().deleteColumns(getCurrentColumnId(), 1, true);
+            purge();
+        } catch (com.aspose.cells.CellsException cx) {
+            sendMessage("Could not delete column", cx.getMessage());
         }
     }
 
@@ -565,5 +666,9 @@ public class WorksheetView implements Serializable {
     private void sendMessageDialog(String summary, String details) {
         RequestContext.getCurrentInstance().showMessageInDialog(new FacesMessage(summary, details));
     }
-}
 
+    public void purge() {
+        this.cachedColumns = null;
+        this.cachedRows = null;
+    }
+}
