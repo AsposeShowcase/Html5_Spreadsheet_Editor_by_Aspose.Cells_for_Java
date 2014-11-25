@@ -46,13 +46,13 @@
                                 <h:outputText value="Error" />
                             </f:facet>
                         </p:ajaxStatus>
-                        <p:selectOneMenu id="sheetswitcher" value="#{worksheet.activeSheet}" editable="true" style="width:200px;vertical-align:top;">
+                        <p:selectOneMenu rendered="#{worksheet.loaded}" id="sheetswitcher" value="#{worksheet.activeSheet}" editable="true" style="width:200px;vertical-align:top;">
                             <p:ajax partialSubmit="true" update=":form:sheet sheetswitcher"/>
                             <f:selectItems value="#{worksheet.sheets}" />
                         </p:selectOneMenu>
 
-                        <p:commandButton icon="ui-icon-plus" actionListener="#{worksheet.onAddNewSheet}" async="true" partialSubmit="true" update=":form:sheet sheetswitcher" />
-                        <p:commandButton icon="ui-icon-minus" actionListener="#{worksheet.onRemoveActiveSheet}" async="true" partialSubmit="true" update=":form:sheet sheetswitcher" />
+                        <p:commandButton rendered="#{worksheet.loaded}" icon="ui-icon-plus" actionListener="#{worksheet.onAddNewSheet}" async="true" partialSubmit="true" update=":form:sheet sheetswitcher" />
+                        <p:commandButton rendered="#{worksheet.loaded}" icon="ui-icon-minus" actionListener="#{worksheet.onRemoveActiveSheet}" async="true" partialSubmit="true" update=":form:sheet sheetswitcher" />
                     </div>
                 </f:facet>
             </p:menubar>
