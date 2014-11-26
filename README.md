@@ -77,9 +77,16 @@ You can edit any cell by a double-click. When you double-click a cell, it switch
 
 ### Rows and Columns
 
-Adding and removing rows is very easy. Each row starts with a number which is the row ID. Click on a row ID to select the entire row. Right-click and click `Add a Row Below` to add a new row right below the selected row. You can remove a row by following same method and clicking `Delete Row`.
+Adding and removing rows and columns is very easy. Click inside any cell to select it than right-click to open the menu. The menu provides sevaral options including adding and removing rows and columns. Click `Add a Row Below` to add a new row right below the selected cell. You can remove a row by following same method and clicking `Delete Row`. You can:
 
-<img src="https://cloud.githubusercontent.com/assets/7696899/4935498/a05c1cf2-65ad-11e4-94c5-59b0312698f0.png" width="50%" />
+* Add a row above the selected cell.
+* Add a row below the selected cell.
+* Add a column on the left of selected cell.
+* Add a column on the right of selected cell.
+* Delete the row including the selected cell.
+* Delete the column including the selected cell.
+
+<img src="https://cloud.githubusercontent.com/assets/726729/5197114/299de6ec-755f-11e4-9c2d-527172760254.png" width="50%" />
 
 ### Working with Sheets
 
