@@ -75,6 +75,22 @@ You can edit any cell by a double-click. When you double-click a cell, it switch
 
 <img src="https://cloud.githubusercontent.com/assets/7696899/4935559/7199fe9c-65ae-11e4-80a1-ef600d9cab8e.png" width="50%" />
 
+### Cell formating
+
+HTML5 Spreadsheet Editor supports rendering of the following cells formating:
+
+* Bold
+* Italic
+* Underlines
+* Font style
+* Font size
+* Text color
+* Strike through
+* Horizontal cell alignment: left, right, center, justified
+* Color
+
+<img src="https://cloud.githubusercontent.com/assets/7696899/4963899/bc777ac0-6734-11e4-90b0-1260c4a53e82.PNG" width="45%" /><img src="https://cloud.githubusercontent.com/assets/726729/5197086/a077c108-755e-11e4-831a-0864c67f6ce1.png" width="45%" />
+
 ### Rows and Columns
 
 Adding and removing rows and columns is very easy. Click inside any cell to select it than right-click to open the menu. The menu provides sevaral options including adding and removing rows and columns. Click `Add a Row Below` to add a new row right below the selected cell. You can remove a row by following same method and clicking `Delete Row`. You can:
