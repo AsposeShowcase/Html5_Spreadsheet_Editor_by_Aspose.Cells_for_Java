@@ -10,7 +10,7 @@ Html5 Spreadsheet Editor is a web application that can view and edit Microsoft E
 * Colors are now rendered properly, including cell background.
 * Users can select cell using mouse click and keyboard TAB key.
 * Users can rename sheet.
-* Sevaral UI improvements including extra scrollbars and extra white borders around menus.
+* Several UI improvements including extra scrollbars and extra white borders around menus.
 * Usability issues related to inline cell editing are fixed.
 * Some bug fixes and internal improvements.
 
@@ -75,9 +75,9 @@ You can edit any cell by a double-click. When you double-click a cell, it switch
 
 <img src="https://cloud.githubusercontent.com/assets/7696899/4935559/7199fe9c-65ae-11e4-80a1-ef600d9cab8e.png" width="50%" />
 
-### Cell formating
+### Cell formatting
 
-HTML5 Spreadsheet Editor supports rendering of the following cells formating:
+HTML5 Spreadsheet Editor supports rendering of the following cells formatting:
 
 * Bold
 * Italic
@@ -93,7 +93,7 @@ HTML5 Spreadsheet Editor supports rendering of the following cells formating:
 
 ### Rows and Columns
 
-Adding and removing rows and columns is very easy. Click inside any cell to select it than right-click to open the menu. The menu provides sevaral options including adding and removing rows and columns. Click `Add a Row Below` to add a new row right below the selected cell. You can remove a row by following same method and clicking `Delete Row`. You can:
+Adding and removing rows and columns is very easy. Click inside any cell to select it than right-click to open the menu. The menu provides several options including adding and removing rows and columns. Click `Add a Row Below` to add a new row right below the selected cell. You can remove a row by following same method and clicking `Delete Row`. You can:
 
 * Add a row above the selected cell.
 * Add a row below the selected cell.
