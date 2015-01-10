@@ -1,6 +1,7 @@
 package com.aspose.spreadsheeteditor;
 
 import com.aspose.cells.Workbook;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -19,6 +20,8 @@ import org.primefaces.context.RequestContext;
 import org.primefaces.event.CellEditEvent;
 import org.primefaces.event.ColumnResizeEvent;
 import org.primefaces.event.FileUploadEvent;
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
 
 @Named(value = "worksheet")
 @ViewScoped
@@ -31,14 +34,16 @@ public class WorksheetView implements Serializable {
     private ArrayList<Column> cachedColumns;
     private int currentColumnId;
     private int currentRowId;
+    private String currentCellClientId;
     private boolean boldOptionEnabled;
+    private boolean italicOptionEnabled;
+    private boolean underlineOptionEnabled;
+    private String fontSelectionOption;
+    private int fontSizeOption;
+    private String alignSelectionOption;
 
     static {
-        try (InputStream i = WorksheetView.class.getResourceAsStream("Aspose.Total.Java.lic")) {
-            new com.aspose.cells.License().setLicense(i);
-        } catch (IOException | com.aspose.cells.CellsException x) {
-            x.printStackTrace();
-        }
+        AsposeLicense.load();
     }
 
     @PostConstruct
@@ -140,6 +145,50 @@ public class WorksheetView implements Serializable {
         } catch (IOException x) {
             throw new RuntimeException(x);
         }
+    }
+
+    public StreamedContent getOutputFile(int saveFormat) {
+        byte[] buf;
+        String ext = null;
+        switch (saveFormat) {
+            case com.aspose.cells.SaveFormat.EXCEL_97_TO_2003:
+                ext = "xls";
+                break;
+            case com.aspose.cells.SaveFormat.XLSX:
+                ext = "xlsx";
+                break;
+            case com.aspose.cells.SaveFormat.XLSM:
+                ext = "xlsm";
+                break;
+            case com.aspose.cells.SaveFormat.XLSB:
+                ext = "xlsb";
+                break;
+            case com.aspose.cells.SaveFormat.XLTX:
+                ext = "xltx";
+                break;
+            case com.aspose.cells.SaveFormat.XLTM:
+                ext = "xltm";
+                break;
+            case com.aspose.cells.SaveFormat.SPREADSHEET_ML:
+                ext = "xml";
+                break;
+            case com.aspose.cells.SaveFormat.PDF:
+                ext = "pdf";
+                break;
+            case com.aspose.cells.SaveFormat.ODS:
+                ext = "ods";
+                break;
+        }
+
+        try {
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            getAsposeWorkbook().save(out, saveFormat);
+            buf = out.toByteArray();
+        } catch (Exception x) {
+            throw new RuntimeException(x);
+        }
+
+        return new DefaultStreamedContent(new ByteArrayInputStream(buf), "application/octet-stream", "Spreadsheet." + ext);
     }
 
     public void loadFromUrl() {
@@ -254,16 +303,14 @@ public class WorksheetView implements Serializable {
                     .append(";");
 
             com.aspose.cells.Font font = asposeCell.getStyle().getFont();
-            style.append("font-family: '").append(font.getName()).append("';");
+            style.append("font-family:'").append(font.getName()).append("';");
 
             if (asposeCell.getStyle().getFont().isItalic()) {
-                style.append("font-style: italic;");
-                result.setItalic(true);
+                result.addClass("i").setItalic(true);
             }
 
             if (asposeCell.getStyle().getFont().isBold()) {
-                style.append("font-weight: bold;");
-                result.setBold(true);
+                result.addClass("b").setBold(true);
             }
 
             switch (asposeCell.getStyle().getFont().getUnderline()) {
@@ -284,30 +331,29 @@ public class WorksheetView implements Serializable {
                 case com.aspose.cells.FontUnderlineType.WAVY_DOUBLE:
                 case com.aspose.cells.FontUnderlineType.WAVY_HEAVY:
                 case com.aspose.cells.FontUnderlineType.WORDS:
-                    style.append("text-decoration: underline;");
-                    result.setUnderline(true);
+                    result.addClass("u").setUnderline(true);
                     break;
             }
 
             switch (asposeCell.getStyle().getFont().getStrikeType()) {
                 case com.aspose.cells.TextStrikeType.SINGLE:
                 case com.aspose.cells.TextStrikeType.DOUBLE:
-                    style.append("text-decoration: line-through;");
+                    result.addClass("sts");
                     break;
             }
 
             switch (asposeCell.getStyle().getFont().getCapsType()) {
                 case com.aspose.cells.TextCapsType.ALL:
-                    style.append("text-transform: capitalize;");
+                    result.addClass("uc");
                     break;
                 case com.aspose.cells.TextCapsType.SMALL:
-                    style.append("font-variant: small-caps;");
+                    result.addClass("sc");
                     break;
             }
 
 //            if (asposeCell.getStyle().getFont().getSize()) {
             style
-                    .append("font-size: ")
+                    .append("font-size:")
                     .append(asposeCell.getStyle().getFont().getSize())
                     .append("pt;");
 //            }
@@ -315,41 +361,41 @@ public class WorksheetView implements Serializable {
             switch (asposeCell.getStyle().getHorizontalAlignment()) {
                 case com.aspose.cells.TextAlignmentType.GENERAL:
                 case com.aspose.cells.TextAlignmentType.LEFT:
-                    style.append("text-align: left;");
+                    result.addClass("al");
                     break;
                 case com.aspose.cells.TextAlignmentType.RIGHT:
-                    style.append("text-align: right;");
+                    result.addClass("ar");
                     break;
                 case com.aspose.cells.TextAlignmentType.CENTER_ACROSS:
                 case com.aspose.cells.TextAlignmentType.CENTER:
-                    style.append("text-align: center;");
+                    result.addClass("ac");
                     break;
                 case com.aspose.cells.TextAlignmentType.JUSTIFY:
-                    style.append("text-align: justify;");
+                    result.addClass("aj");
                     break;
             }
 
             switch (asposeCell.getStyle().getVerticalAlignment()) {
                 case com.aspose.cells.TextAlignmentType.TOP:
-                    style.append("vertical-align: top;");
+                    result.addClass("at");
                     break;
                 case com.aspose.cells.TextAlignmentType.CENTER:
-                    style.append("vertical-align: middle;");
+                    result.addClass("am");
                     break;
                 case com.aspose.cells.TextAlignmentType.BOTTOM:
-                    style.append("vertical-align: bottom;");
+//                    style.append("vertical-align: bottom;");
+                    result.addClass("ab");
                     break;
             }
 
-            int cellRotationAngle = asposeCell.getStyle().getRotationAngle();
-            cellRotationAngle = 0; // TODO
-            style.append("writing-mode: lr-bt ;")
-                    .append("transform: rotate(-").append(cellRotationAngle).append("deg);")
-                    .append("-webkit-transform: rotate(-").append(cellRotationAngle).append("deg);")
-                    .append("-moz-transform: rotate(-").append(cellRotationAngle).append("deg);")
-                    .append("-ms-transform: rotate(-").append(cellRotationAngle).append("deg);")
-                    .append("-o-transform: rotate(-").append(cellRotationAngle).append("deg);");
-
+//            int cellRotationAngle = asposeCell.getStyle().getRotationAngle();
+//            cellRotationAngle = 0; // TODO
+//            style.append("writing-mode: lr-bt ;")
+//                    .append("transform: rotate(-").append(cellRotationAngle).append("deg);")
+//                    .append("-webkit-transform: rotate(-").append(cellRotationAngle).append("deg);")
+//                    .append("-moz-transform: rotate(-").append(cellRotationAngle).append("deg);")
+//                    .append("-ms-transform: rotate(-").append(cellRotationAngle).append("deg);")
+//                    .append("-o-transform: rotate(-").append(cellRotationAngle).append("deg);");
             com.aspose.cells.Color cellTextColor = asposeCell.getStyle().getFont().getColor();
             style.append("color:")
                     .append(asposeColorToCssColor(cellTextColor, true))
@@ -403,9 +449,9 @@ public class WorksheetView implements Serializable {
         }
 
         this.cachedRows = new ArrayList<>();
-        int rowCount = 0;
+        int rowCount = 20;
         try {
-            rowCount = getAsposeWorksheet().getCells().getMaxRow() + 1;
+            rowCount = 20 + getAsposeWorksheet().getCells().getMaxRow() + 1;
         } catch (Exception x) {
         }
         rowCount = rowCount + 10 - (rowCount % 10);
@@ -468,8 +514,33 @@ public class WorksheetView implements Serializable {
         return this.cachedRows;
     }
 
-    public void applyCellFormating() {
+    public void applyCellFormatting() {
+        com.aspose.cells.Cell c = getAsposeWorksheet().getCells().get(currentRowId, currentColumnId);
+        com.aspose.cells.Style s = c.getStyle();
 
+        s.getFont().setBold(boldOptionEnabled);
+        s.getFont().setItalic(italicOptionEnabled);
+        s.getFont().setUnderline(underlineOptionEnabled ? com.aspose.cells.FontUnderlineType.SINGLE : com.aspose.cells.FontUnderlineType.NONE);
+        s.getFont().setName(fontSelectionOption);
+        s.getFont().setSize(fontSizeOption);
+        switch (alignSelectionOption) {
+            case "al":
+                s.setHorizontalAlignment(com.aspose.cells.TextAlignmentType.LEFT);
+                break;
+            case "ac":
+                s.setHorizontalAlignment(com.aspose.cells.TextAlignmentType.CENTER);
+                break;
+            case "ar":
+                s.setHorizontalAlignment(com.aspose.cells.TextAlignmentType.RIGHT);
+                break;
+            case "aj":
+                s.setHorizontalAlignment(com.aspose.cells.TextAlignmentType.JUSTIFY);
+                break;
+        }
+
+        c.setStyle(s);
+        RequestContext.getCurrentInstance().update(currentCellClientId);
+        purge();
     }
 
     public int getCurrentColumnId() {
@@ -488,12 +559,60 @@ public class WorksheetView implements Serializable {
         this.currentRowId = currentRowId;
     }
 
+    public String getCurrentCellClientId() {
+        return currentCellClientId;
+    }
+
+    public void setCurrentCellClientId(String currentCellClientId) {
+        this.currentCellClientId = currentCellClientId;
+    }
+
     public boolean isBoldOptionEnabled() {
         return boldOptionEnabled;
     }
 
     public void setBoldOptionEnabled(boolean boldOptionEnabled) {
         this.boldOptionEnabled = boldOptionEnabled;
+    }
+
+    public boolean isItalicOptionEnabled() {
+        return italicOptionEnabled;
+    }
+
+    public void setItalicOptionEnabled(boolean italicOptionEnabled) {
+        this.italicOptionEnabled = italicOptionEnabled;
+    }
+
+    public boolean isUnderlineOptionEnabled() {
+        return underlineOptionEnabled;
+    }
+
+    public void setUnderlineOptionEnabled(boolean underlineOptionEnabled) {
+        this.underlineOptionEnabled = underlineOptionEnabled;
+    }
+
+    public String getFontSelectionOption() {
+        return fontSelectionOption;
+    }
+
+    public void setFontSelectionOption(String fontSelectionOption) {
+        this.fontSelectionOption = fontSelectionOption;
+    }
+
+    public int getFontSizeOption() {
+        return fontSizeOption;
+    }
+
+    public void setFontSizeOption(int fontSizeOption) {
+        this.fontSizeOption = fontSizeOption;
+    }
+
+    public String getAlignSelectionOption() {
+        return alignSelectionOption;
+    }
+
+    public void setAlignSelectionOption(String alignSelectionOption) {
+        this.alignSelectionOption = alignSelectionOption;
     }
 
     public void onFileUpload(FileUploadEvent e) {
@@ -650,6 +769,14 @@ public class WorksheetView implements Serializable {
         }
     }
 
+    public List<String> getFonts() {
+        ArrayList<String> list = new ArrayList<>();
+        if (isLoaded()) {
+            // TODO: get list of fonts used by the workboook
+        }
+        return list;
+    }
+
     public void setCell(int columnId, int rowId, Cell cell) {
         try {
             getAsposeWorksheet().getCells().get(rowId, columnId).putValue(cell.getValue());
@@ -665,6 +792,13 @@ public class WorksheetView implements Serializable {
 
     private void sendMessageDialog(String summary, String details) {
         RequestContext.getCurrentInstance().showMessageInDialog(new FacesMessage(summary, details));
+    }
+
+    public void updatePartialView() {
+        String id = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("id");
+        if (id != null) {
+            RequestContext.getCurrentInstance().update(id);
+        }
     }
 
     public void purge() {

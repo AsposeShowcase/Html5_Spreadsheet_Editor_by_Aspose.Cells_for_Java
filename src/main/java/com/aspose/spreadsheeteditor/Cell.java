@@ -1,12 +1,15 @@
 package com.aspose.spreadsheeteditor;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.StringJoiner;
 
 public class Cell implements Serializable {
 
     private String value;
     private String formula;
     private String style;
+    private HashSet<String> cssClass = new HashSet<>();
     private int columnId;
     private int rowId;
     private int colspan = 0;
@@ -38,6 +41,24 @@ public class Cell implements Serializable {
 
     public String getStyle() {
         return style;
+    }
+
+    public Cell addClass(String c) {
+        this.cssClass.add(c);
+        return this;
+    }
+
+    public Cell removeClass(String c) {
+        this.cssClass.remove(c);
+        return this;
+    }
+
+    public String getCssClass() {
+        StringJoiner j = new StringJoiner(" ");
+        for (String s : this.cssClass) {
+            j.add(s);
+        }
+        return j.toString();
     }
 
     public Cell setStyle(String style) {
