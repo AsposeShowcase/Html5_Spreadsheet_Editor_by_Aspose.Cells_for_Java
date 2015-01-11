@@ -2,7 +2,7 @@
 
 Html5 Spreadsheet Editor is a web application that can view and edit Microsoft Excel files. It highlights commonly used features of [Aspose.Cells for Java](http://www.aspose.com/java/excel-component.aspx) and demonstrates how to use them to create, manipulate and render a spreadsheet in your Java application.
 
-![](https://cloud.githubusercontent.com/assets/726729/5197116/2f511bc2-755f-11e4-8aae-494cf17f6ffa.png)
+![](https://cloud.githubusercontent.com/assets/9132329/5697305/5fe0d63c-9a0e-11e4-89d2-d14a90dd004e.png)
 
 ## Whats new in 1.3
 
@@ -26,42 +26,52 @@ You can open files using one of the following methods.
 
 #### Upload file from local computer
 
-To upload a file form local computer, Click `File`->`Open from Computer` to open the `Browser` dialog. Go to your desired location of file and select it. Click `Open`. The is loaded in the editor.
+To upload a file form local computer, Click `Open from Computer` on `File` tab to open the `Browser` dialog. Go to your desired location of file and select it. Click `Open`. The file will be opened in the editor.
 
-<img src="https://cloud.githubusercontent.com/assets/7696899/4933472/81814b7e-6597-11e4-849c-6a6e79a88bc9.png" width="50%" />
+<img src="https://cloud.githubusercontent.com/assets/9132329/5697307/886486b2-9a0e-11e4-8e14-e97aeda7919a.png" width="50%" />
 
 #### Load files from Dropbox
 
-To open file from Dropbox, Click `File`->`Open from Dropbox` to open Dropbox file chooser. If you are not already signed-in to Dropbox, it will require you to signin to your Dropbox account. Choose your desired file from Dropbox folder and click `Choose` at the bottom. Your selected file will be opened from Dropbox.
+To open file from Dropbox, Click `Open from Dropbox` on `File` tab to open Dropbox file chooser. If you are not already signed-in to Dropbox, it will require you to signin to your Dropbox account. Choose your desired file from Dropbox folder and click `Choose` at the bottom. Your selected file will be opened from Dropbox.
 
-<img src="https://cloud.githubusercontent.com/assets/7696899/4933564/78323708-6598-11e4-9c15-dd89c0b78b5f.png" width="50%" />
+<img src="https://cloud.githubusercontent.com/assets/9132329/5697310/b9434480-9a0e-11e4-9a46-feb8612a6e65.png" width="50%" />
 
 #### Load file from a URL
 
-Files can be directly opened from URLs. This allows you to edit any publicly available file on Internet. To open the file append `?url=location` parameter with the value of your desired location while loading the editor.
+Files can be directly opened from URLs. This allows you to edit any publicly available file on Internet. To open the file append `?url=location` parameter with the value of your desired location while loading the editor. For example:
 
 `http://spreadsheet-editor.aspose.com/?url=http://example.com/Sample.xlsx`
 
-<img src="https://cloud.githubusercontent.com/assets/7696899/4933769/bff7155c-659a-11e4-9a2d-ec7279b25d6a.PNG" width="50%" />
+<img src="https://cloud.githubusercontent.com/assets/9132329/5697316/d2d6629c-9a0e-11e4-9714-0d9215e33b5f.png" width="50%" />
 
 ### Create new files
 
-To create a new empty spreadsheet click `New` in `File` menu.
+To create a new empty spreadsheet click `New` on `File` tab.
 
-<img src="https://cloud.githubusercontent.com/assets/7696899/4935279/9c1049be-65aa-11e4-8dc7-cb38a3093f71.PNG" width="50%" />
+<img src="https://cloud.githubusercontent.com/assets/9132329/5697305/5fe0d63c-9a0e-11e4-89d2-d14a90dd004e.png" width="50%" />
 
-### Saving files
+### Export and Save files
 
-After editing files, you will want to save those changes. The editor allows you to save the modified files to local computer. To save the files click `File` and than click `Save`. The modified file will be available for download.
+After editing files, you will want to save those changes. The editor allows you to export and download the modified files to local computer. To export the file click `Export as` on `File` tab and choose your desired format. The modified file will be exported for download. The following formats are supported for export:
 
-<img src="https://cloud.githubusercontent.com/assets/7696899/4933841/811669d6-659b-11e4-9f43-49d8d22564b4.PNG" width="50%" />
+* Excel 2007-2013 XLSX
+* Excel 1997-2003 XLS
+* Excel XLSM
+* Excel XLSB
+* Excel XLTX
+* Excel XLTM
+* SpreadsheetML
+* Portable Document Format (PDF)
+* OpenDocument Spreadsheet (ODS)
+
+<img src="https://cloud.githubusercontent.com/assets/9132329/5697333/071a84ca-9a0f-11e4-9d25-b844247bbcf6.png" width="50%" />
 
 ### Supported formats
 
-HTML5 Spreadsheet Editor supports following formats:
+HTML5 Spreadsheet Editor can open files in the following formats:
 
-* XLS
-* XLSX
+* Excel 1997-2003 XLS
+* Excel 2007-2013 XLSX
 * XLSM
 * XLSB
 * XLTX
@@ -71,13 +81,13 @@ HTML5 Spreadsheet Editor supports following formats:
 
 ### Editing Cells
 
-You can edit any cell by a double-click. When you double-click a cell, it switches to edit-mode. To cancel editing, press the ESC key. To swich to normal mode, press ENTER. You can also press TAB to move to the next cell. You can specify static text and numbers. Formulas are supported too. To enter a formula, start the cell value with an equal sign (=). For example `=SUM(A1:A5)`. All formulas supported by Microsoft Excel are supported by HTML5 Spreadsheet Editor too.
+You can edit any cell by a double-click. When you double-click a cell, it switches to edit-mode. To cancel editing, press the ESC key. To switch to normal mode, press ENTER. You can also press TAB to move to the next cell. You can specify static text and numbers. Formulas are supported too. To enter a formula, start the cell value with an equal sign (=). For example `=SUM(A1:A5)`. All formulas supported by Microsoft Excel are supported by HTML5 Spreadsheet Editor too.
 
-<img src="https://cloud.githubusercontent.com/assets/7696899/4935559/7199fe9c-65ae-11e4-80a1-ef600d9cab8e.png" width="50%" />
+<img src="https://cloud.githubusercontent.com/assets/9132329/5697338/21a78784-9a0f-11e4-831c-3ca27c5be757.png" width="50%" />
 
 ### Cell formatting
 
-HTML5 Spreadsheet Editor supports rendering of the following cells formatting:
+HTML5 Spreadsheet Editor supports rendering of the following text formatting:
 
 * Bold
 * Italic
@@ -89,11 +99,20 @@ HTML5 Spreadsheet Editor supports rendering of the following cells formatting:
 * Horizontal cell alignment: left, right, center, justified
 * Color
 
-<img src="https://cloud.githubusercontent.com/assets/7696899/4963899/bc777ac0-6734-11e4-90b0-1260c4a53e82.PNG" width="45%" /><img src="https://cloud.githubusercontent.com/assets/726729/5197086/a077c108-755e-11e4-831a-0864c67f6ce1.png" width="45%" />
+Support for editing of the following formatting is available:
+
+* Bold
+* Italic
+* Underlines
+* Font style
+* Font size
+* Horizontal cell alignment: left, right, center, justified
+
+<img src="https://cloud.githubusercontent.com/assets/9132329/5697344/437f477a-9a0f-11e4-9a9f-8a2261b14673.png" width="50%" />
 
 ### Rows and Columns
 
-Adding and removing rows and columns is very easy. Click inside any cell to select it than right-click to open the menu. The menu provides several options including adding and removing rows and columns. Click `Add a Row Below` to add a new row right below the selected cell. You can remove a row by following same method and clicking `Delete Row`. You can:
+Adding and removing rows and columns is very easy. Click inside any cell and click `Add a Row Above` to add a new row right above the selected cell. You can remove a row by following same method and clicking `Delete Row`. You can:
 
 * Add a row above the selected cell.
 * Add a row below the selected cell.
@@ -102,15 +121,15 @@ Adding and removing rows and columns is very easy. Click inside any cell to sele
 * Delete the row including the selected cell.
 * Delete the column including the selected cell.
 
-<img src="https://cloud.githubusercontent.com/assets/726729/5197114/299de6ec-755f-11e4-9c2d-527172760254.png" width="50%" />
+<img src="https://cloud.githubusercontent.com/assets/9132329/5697351/5f4b2bfe-9a0f-11e4-9802-75ace6620494.png" width="50%" />
 
 ### Working with Sheets
 
-Microsoft Excel allows multiple sheets in a single file. HTML5 Spreadsheet Editor allows you to edit and switch between sheets. At the top right-hand corner there is a drop-down list of sheets. The selected sheet is the one which opened by the editor. To switch to another sheet, select it from the list. The plus `+` button **adds a new sheet**, and minus `-` button **deletes the selected sheet**.
+Microsoft Excel allows multiple sheets in a single file. HTML5 Spreadsheet Editor allows you to edit and switch between sheets. On the Sheets tab we have a drop-down list of sheets. The selected sheet is the one which is opened by the editor. To switch to another sheet, select it from the list. The plus `+` button **adds a new sheet**, and minus `-` button **deletes the selected sheet**.
 
 To **rename existing sheet**, click on the sheet name in the text box to edit it. When you are finished editing the name, press ENTER key, or click anywhere outside the box. The sheet will be renamed.
 
-<img src="https://cloud.githubusercontent.com/assets/7696899/4935471/4ef22e88-65ad-11e4-8c64-88f01d777986.png" width="50%" />
+<img src="https://cloud.githubusercontent.com/assets/9132329/5697357/77a7bf14-9a0f-11e4-92ab-ccba33d86f49.png" width="50%" />
 
 ### Embed Anywhere
 
@@ -143,7 +162,7 @@ mvn package
 
 The project works without a license, with limitations. To remove limitations, you can acquire a free [temporary license](http://www.aspose.com/corporate/purchase/temporary-license.aspx) or [buy a full license](http://www.aspose.com/purchase/default.aspx).
 
-By default, it will try to load `Aspose.Total.Java.lic` file from `src/main/resources/com/aspose/spreadsheeteditor` directory. Just copy the license file to this directory. You can change the default behavior by editing `WorksheetView.init()` method.
+By default, it will try to load `Aspose.Total.Java.lic` file from `src/main/resources/com/aspose/spreadsheeteditor` directory. Just copy the license file to this directory. You can change the default behavior by editing `AsposeLicense` class.
 
 ## Deployment
 
