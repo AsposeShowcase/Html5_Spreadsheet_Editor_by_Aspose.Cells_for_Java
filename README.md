@@ -1,18 +1,18 @@
-## Html5 Spreadsheet Editor by Aspose for Java v1.3
+## HTML5 Spreadsheet Editor by Aspose for Java v1.4
 
 Html5 Spreadsheet Editor is a web application that can view and edit Microsoft Excel files. It highlights commonly used features of [Aspose.Cells for Java](http://www.aspose.com/java/excel-component.aspx) and demonstrates how to use them to create, manipulate and render a spreadsheet in your Java application.
 
 ![](https://cloud.githubusercontent.com/assets/9132329/5697305/5fe0d63c-9a0e-11e4-89d2-d14a90dd004e.png)
 
-## Whats new in 1.3
+## Whats new in 1.4
 
-* Users can resize columns.
-* Colors are now rendered properly, including cell background.
-* Users can select cell using mouse click and keyboard TAB key.
-* Users can rename sheet.
-* Several UI improvements including extra scrollbars and extra white borders around menus.
-* Usability issues related to inline cell editing are fixed.
-* Some bug fixes and internal improvements.
+* Redesigned the interface. Removed menus and toolbars and introduced a more compact ribbon.
+* Cell-formatting support added. User can now make text bold and italic etc.
+* Export spreadsheet to various formats including PDF.
+* Cells are highlighted when selected by a mouse click. Double-click will switch to editing mode.
+* File download will not pop up a separate window anymore. This was confusing and annoying sometimes.
+* Optimized performance. Minimized the number and size of requests between client and server.
+* Context menu has been removed.
 
 ## Highlights
 
