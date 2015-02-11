@@ -1,4 +1,4 @@
-## HTML5 Spreadsheet Editor by Aspose for Java v1.4
+## HTML5 Spreadsheet Editor by Aspose.Cells for Java v1.4
 
 Html5 Spreadsheet Editor is a web application that can view and edit Microsoft Excel files. It highlights commonly used features of [Aspose.Cells for Java](http://www.aspose.com/java/excel-component.aspx) and demonstrates how to use them to create, manipulate and render a spreadsheet in your Java application.
 
