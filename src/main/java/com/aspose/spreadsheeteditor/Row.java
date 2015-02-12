@@ -26,6 +26,14 @@ public class Row implements Serializable {
         return this.cellsMap;
     }
 
+    public void putCell(String columnName, Cell c) {
+        this.cellsMap.put(columnName, c);
+    }
+
+    public void putCell(int columnId, Cell c) {
+        this.cellsMap.put(com.aspose.cells.CellsHelper.columnIndexToName(columnId), c);
+    }
+
     public List<Cell> getCellsList() {
         return this.cellsList;
     }
@@ -57,7 +65,7 @@ public class Row implements Serializable {
 
         public Builder setCell(String column, Cell cell) {
             this.instance.cellsMap.put(column, cell);
-            
+
             int columnId = com.aspose.cells.CellsHelper.columnNameToIndex(column);
             this.instance.cellsList.ensureCapacity(columnId + 1);
             this.instance.cellsList.add(columnId, cell);

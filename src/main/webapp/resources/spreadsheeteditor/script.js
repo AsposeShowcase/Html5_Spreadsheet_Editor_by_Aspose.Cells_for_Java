@@ -8,6 +8,26 @@ function showFileUploadDialog() {
     return false;
 }
 
+function showColumnWidthDialog() {
+    PF('columnWidthDialog').show();
+    return false;
+}
+
+function hideColumnWidthDialog() {
+    PF('columnWidthDialog').hide();
+    return false;
+}
+
+function showRowHeightDialog() {
+    PF('rowHeightDialog').show();
+    return false;
+}
+
+function hideRowHeightDialog() {
+    PF('rowHeightDialog').hide();
+    return false;
+}
+
 PrimeFaces.widget.DataTable = PrimeFaces.widget.DataTable.extend({
     bindEditEvents: function() {
         var $this = this;
@@ -45,6 +65,8 @@ PrimeFaces.widget.DataTable = PrimeFaces.widget.DataTable.extend({
                             // TODO: save the value to PF('alignOptionSelector');
                         }
                     });
+                    PF('currentColumnWidthValue').jq.val($(this).width());
+                    PF('currentRowHeightValue').jq.val($(this).height());
 
                     $($this.selectedCell).removeClass('sheet-selected-cell');
                     $(this).addClass('sheet-selected-cell');
@@ -82,17 +104,23 @@ function updateCurrentCells() {
     ]);
 }
 
-if (typeof uhg5ujbg97b699ggn34gg54 === 'undefined') {
-    $(document).on('click', '.ui-button.cell-formatting', function(e) {
-        PF('applyFormattingButton').getJQ().click();
-    });
+setInterval(function() {
+    if (typeof $ === 'undefined' && !$('#sheet .ui-datatable').length) {
+        return;
+    }
 
-    $(document).on('click', '.ui-selectonemenu-panel.cell-formatting .ui-selectonemenu-list-item', function(e) {
-        PF('applyFormattingButton').getJQ().click();
+    $('#sheet .ui-datatable').height($(window).height() - $('#sheet .ui-datatable').position().top - 1);
+}, 786);
+
+$(document).ready(function() {
+    [
+        '.ui-button.cell-formatting',
+        '.ui-selectonemenu-panel.cell-formatting .ui-selectonemenu-list-item',
+        '.ui-selectonebutton.cell-formatting .ui-button',
+    ].forEach(function(sel) {
+        $(document).on('click', sel, function(e) {
+            PF('applyFormattingButton').getJQ().click();
+        });
     });
-    $(document).on('click', '.ui-selectonebutton.cell-formatting .ui-button', function(e) {
-        PF('applyFormattingButton').getJQ().click();
-    });
-}
-var uhg5ujbg97b699ggn34gg54 = true;
+});
 

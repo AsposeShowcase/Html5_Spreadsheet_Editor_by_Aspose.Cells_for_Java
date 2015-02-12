@@ -32,7 +32,7 @@
                 </f:facet>
             </p:ajaxStatus>
         </div>
-        <p:growl id="notifications" autoUpdate="false" showDetail="true" />
+        <p:growl id="notifications" autoUpdate="true" showDetail="true" />
 
         <h:form id="ribbon">
             <span class="ui-helper-hidden">
@@ -85,10 +85,10 @@
                 </p:tab>
                 <p:tab title="Format">
                     <p:ribbonGroup>
-                        <p:selectBooleanButton widgetVar="boldOptionButton" disabled="#{!worksheet.loaded}" styleClass="cell-formatting" value="#{worksheet.boldOptionEnabled}" onIcon="ui-icon-bold" offIcon="ui-icon-bold" onLabel="Bold" offLabel="Bold" />
-                        <p:selectBooleanButton widgetVar="italicOptionButton" disabled="#{!worksheet.loaded}" styleClass="cell-formatting" value="#{worksheet.italicOptionEnabled}" onIcon="ui-icon-italic" offIcon="ui-icon-italic" onLabel="Italic" offLabel="Italic" />
-                        <p:selectBooleanButton widgetVar="underlineOptionButton" disabled="#{!worksheet.loaded}" styleClass="cell-formatting" value="#{worksheet.underlineOptionEnabled}" onIcon="ui-icon-underline" offIcon="ui-icon-underline" onLabel="Underline" offLabel="Underline" />
-                        <p:selectOneMenu widgetVar="fontOptionSelector" disabled="#{!worksheet.loaded}" value="#{worksheet.fontSelectionOption}" panelStyleClass="cell-formatting" style="min-width:150px;" panelStyle="min-width:150px;">
+                        <p:selectBooleanButton widgetVar="boldOptionButton" disabled="#{!worksheet.loaded}" styleClass="cell-formatting" value="#{formatting.boldOptionEnabled}" onIcon="ui-icon-bold" offIcon="ui-icon-bold" onLabel="Bold" offLabel="Bold" />
+                        <p:selectBooleanButton widgetVar="italicOptionButton" disabled="#{!worksheet.loaded}" styleClass="cell-formatting" value="#{formatting.italicOptionEnabled}" onIcon="ui-icon-italic" offIcon="ui-icon-italic" onLabel="Italic" offLabel="Italic" />
+                        <p:selectBooleanButton widgetVar="underlineOptionButton" disabled="#{!worksheet.loaded}" styleClass="cell-formatting" value="#{formatting.underlineOptionEnabled}" onIcon="ui-icon-underline" offIcon="ui-icon-underline" onLabel="Underline" offLabel="Underline" />
+                        <p:selectOneMenu widgetVar="fontOptionSelector" disabled="#{!worksheet.loaded}" value="#{formatting.fontSelectionOption}" panelStyleClass="cell-formatting" style="min-width:150px;" panelStyle="min-width:150px;">
                             <f:selectItem itemLabel="Arial" itemValue="Arial" />
                             <f:selectItem itemLabel="Arial Black" itemValue="Arial Black" />
                             <f:selectItem itemLabel="Book Antiqua" itemValue="Book Antiqua" />
@@ -103,7 +103,7 @@
                             <f:selectItem itemLabel="Verdana" itemValue="Verdana" />
                             <f:selectItems value="#{worksheet.fonts}" />
                         </p:selectOneMenu>
-                        <p:selectOneMenu widgetVar="fontSizeOptionSelector" value="#{worksheet.fontSizeOption}" panelStyleClass="cell-formatting" disabled="#{!worksheet.loaded}" style="min-width:50px;" panelStyle="min-width:50px;">
+                        <p:selectOneMenu widgetVar="fontSizeOptionSelector" value="#{formatting.fontSizeOption}" panelStyleClass="cell-formatting" disabled="#{!worksheet.loaded}" style="min-width:50px;" panelStyle="min-width:50px;">
                             <f:selectItem itemLabel="8" itemValue="8" />
                             <f:selectItem itemLabel="9" itemValue="9" />
                             <f:selectItem itemLabel="10" itemValue="10" />
@@ -123,20 +123,33 @@
                             <f:selectItem itemLabel="64" itemValue="64" />
                             <f:selectItem itemLabel="72" itemValue="72" />
                         </p:selectOneMenu>
-                        <p:selectOneButton widgetVar="alignOptionSelector" disabled="#{!worksheet.loaded}" value="#{worksheet.alignSelectionOption}" styleClass="cell-formatting">
+                        <p:selectOneButton widgetVar="alignOptionSelector" disabled="#{!worksheet.loaded}" value="#{formatting.alignSelectionOption}" styleClass="cell-formatting">
                             <f:selectItem itemLabel="Left" itemValue="al" />
                             <f:selectItem itemLabel="Center" itemValue="ac" />
                             <f:selectItem itemLabel="Right" itemValue="ar" />
                             <f:selectItem itemLabel="Justify" itemValue="aj" />
                         </p:selectOneButton>
+                        <p:menuButton value="Clear Cell" disabled="#{!worksheet.loaded}" iconPos="right">
+                            <p:menuitem value="Formats" actionListener="#{worksheet.clearCurrentCellFormatting}" />
+                            <p:menuitem value="Contents" actionListener="#{worksheet.clearCurrentCellContents}" />
+                            <p:menuitem value="Both" actionListener="#{worksheet.clearCurrentCell}" />
+                        </p:menuButton>
                     </p:ribbonGroup>
                     <p:ribbonGroup>
-                        <p:commandButton actionListener="#{worksheet.addColumnBefore}" disabled="#{!worksheet.loaded}" icon="ui-icon-add-column-before" update=":sheet" />
-                        <p:commandButton actionListener="#{worksheet.addColumnAfter}" disabled="#{!worksheet.loaded}" icon="ui-icon-add-column-after" update=":sheet" />
-                        <p:commandButton actionListener="#{worksheet.addRowAbove}" disabled="#{!worksheet.loaded}" icon="ui-icon-add-row-before" update=":sheet" />
-                        <p:commandButton actionListener="#{worksheet.addRowBelow}" disabled="#{!worksheet.loaded}" icon="ui-icon-add-row-after" update=":sheet" />
-                        <p:commandButton actionListener="#{worksheet.deleteColumn}" disabled="#{!worksheet.loaded}" icon="ui-icon-remove-column" update=":sheet" />
-                        <p:commandButton actionListener="#{worksheet.deleteRow}" disabled="#{!worksheet.loaded}" icon="ui-icon-remove-row" update=":sheet" />
+                        <p:commandButton actionListener="#{worksheet.addColumnBefore}" disabled="#{!worksheet.loaded}" icon="ui-icon-add-column-before" title="Insert Column on Right" update=":sheet" />
+                        <p:commandButton actionListener="#{worksheet.addColumnAfter}" disabled="#{!worksheet.loaded}" icon="ui-icon-add-column-after" title="Insert Column on Left" update=":sheet" />
+                        <p:commandButton actionListener="#{worksheet.addRowAbove}" disabled="#{!worksheet.loaded}" icon="ui-icon-add-row-before" title="Insert Row Above" update=":sheet" />
+                        <p:commandButton actionListener="#{worksheet.addRowBelow}" disabled="#{!worksheet.loaded}" icon="ui-icon-add-row-after" title="Insert Row Below" update=":sheet" />
+                        <p:commandButton actionListener="#{worksheet.deleteColumn}" disabled="#{!worksheet.loaded}" icon="ui-icon-remove-column" title="Delete this Column" update=":sheet" />
+                        <p:commandButton actionListener="#{worksheet.deleteRow}" disabled="#{!worksheet.loaded}" icon="ui-icon-remove-row" title="Delete this Row" update=":sheet" />
+                    </p:ribbonGroup>
+                    <p:ribbonGroup>
+                        <p:menuButton value="Delete Cell" disabled="#{!worksheet.loaded}" iconPos="right">
+                            <p:menuitem value="Shift Cells Up" actionListener="#{worksheet.removeCellShiftUp}" update=":sheet" />
+                            <p:menuitem value="Shift Cells Left" actionListener="#{worksheet.removeCellShiftLeft}" update=":sheet" />
+                        </p:menuButton>
+                        <p:commandButton value="Column Width" onclick="return showColumnWidthDialog()" disabled="#{!worksheet.loaded}" />
+                        <p:commandButton value="Row Height" onclick="return showRowHeightDialog()" disabled="#{!worksheet.loaded}" />
                     </p:ribbonGroup>
                 </p:tab>
                 <p:tab title="Insert">
@@ -148,6 +161,10 @@
                         <p:menuButton value="Column" disabled="#{!worksheet.loaded}" iconPos="right">
                             <p:menuitem value="Insert Column on Right" actionListener="#{worksheet.addColumnAfter}" update=":sheet" />
                             <p:menuitem value="Insert Column on Left" actionListener="#{worksheet.addColumnBefore}" update=":sheet" />
+                        </p:menuButton>
+                        <p:menuButton value="Cell" disabled="#{!worksheet.loaded}" iconPos="right">
+                            <p:menuitem value="Shift Cells Right" actionListener="#{worksheet.addCellShiftRight}" update=":sheet" />
+                            <p:menuitem value="Shift Cells Down" actionListener="#{worksheet.addCellShiftDown}" update=":sheet" />
                         </p:menuButton>
                     </p:ribbonGroup>
                 </p:tab>
@@ -172,6 +189,27 @@
                     </p:ribbonGroup>
                 </p:tab>
             </p:ribbon>
+
+            <p:dialog modal="true" widgetVar="columnWidthDialog" rendered="#{worksheet.loaded}">
+                <f:facet name="header">
+                    Column Width
+                </f:facet>
+                <p:inputText widgetVar="currentColumnWidthValue" value="#{worksheet.currentColumnWidth}" />
+                <f:facet name="footer">
+                    <p:commandButton value="Close" onclick="hideColumnWidthDialog()" />
+                </f:facet>
+            </p:dialog>
+
+            <p:dialog modal="true" widgetVar="rowHeightDialog" rendered="#{worksheet.loaded}">
+                <f:facet name="header">
+                    Row Height
+                </f:facet>
+                <p:inputText widgetVar="currentRowHeightValue" value="#{worksheet.currentRowHeight}" />
+                <f:facet name="footer">
+                    <p:commandButton value="Close" onclick="hideRowHeightDialog()" />
+                </f:facet>
+            </p:dialog>
+
         </h:form>
 
         <h:form id="intro">
@@ -193,16 +231,14 @@
                 widgetVar="sheet"
                 var="row"
                 value="#{worksheet.rows}"
-                selectionMode="single"
                 editable="true"
                 editMode="cell"
                 resizableColumns="true"
                 rowKey="#{row.id}"
-                disabledSelection="true"
                 style="overflow: scroll">
 
-                <p:ajax event="colResize" listener="#{worksheet.onColumnResize}" partialSubmit="true" />
-                <p:ajax event="cellEdit" listener="#{worksheet.onCellEdit}" partialSubmit="true" update=":sheet" />
+                <p:ajax event="colResize" listener="#{worksheet.onColumnResize}" />
+                <p:ajax event="cellEdit" listener="#{worksheet.onCellEdit}" />
 
                 <p:column style="text-align: right; width: 20px">
                     <h:outputText value="#{row.id + 1}" />
@@ -213,7 +249,7 @@
                         headerText="#{column.name}"
                         colspan="#{row.cellsMap[column.name].colspan}"
                         rowspan="#{row.cellsMap[column.name].rowspan}"
-                        style="width:#{worksheet.getColumnWidth(column.id)}px; height:#{worksheet.getRowHeight(row.id)}px;">
+                        style="width:#{worksheet.columnWidth[column.id]}px; height:#{worksheet.rowHeight[row.id]}px;">
 
                         <p:cellEditor>
                             <f:facet name="output">
@@ -235,10 +271,15 @@
 
         </h:form>
 
-        <p:dialog widgetVar="aboutDialog" header="About" modal="true" style="text-align: center">
+        <p:dialog widgetVar="aboutDialog" modal="true" style="text-align: center">
+            <f:facet name="header">
+                About
+            </f:facet>
             <h:graphicImage value="logo.jpg" />
-            <h3>Spreadsheet Editor</h3>
-            &#9400; Aspose 2002-2014. All Rights Reserved.
+            <h2>Spreadsheet Editor</h2>
+            <f:facet name="footer">
+                &#9400; Aspose 2002-2015. All Rights Reserved.
+            </f:facet>
         </p:dialog>
 
         <h:form style="display:none">
