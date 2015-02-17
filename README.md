@@ -4,7 +4,7 @@ Html5 Spreadsheet Editor is a web application that can view and edit Microsoft E
 
 ![](https://cloud.githubusercontent.com/assets/9132329/5697305/5fe0d63c-9a0e-11e4-89d2-d14a90dd004e.png)
 
-## Whats new in 1.5
+## What's new in 1.5
 
 *	Insert cells
 *	Delete cells
