@@ -138,8 +138,7 @@ To **rename existing sheet**, click on the sheet name in the text box to edit it
 
 You can embed HTML5 Spreadsheet Editor in any website of your choice using IFRAME. Here is an example code:
 
-```<
-iframe src="http://spreadsheet-editor.aspose.com/?url=http://example.com/Sample.xlsx" width="800" height="600">
+```<iframe src="http://spreadsheet-editor.aspose.com/?url=http://example.com/Sample.xlsx" width="800" height="600">
 Your web browser does not support IFRAMEs
 </iframe>
 ```
