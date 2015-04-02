@@ -210,20 +210,11 @@ public class CellsService {
                     c.addClass("am");
                     break;
                 case com.aspose.cells.TextAlignmentType.BOTTOM:
-//                    style.append("vertical-align: bottom;");
                     c.addClass("ab");
                     break;
                 default:
             }
 
-//            int cellRotationAngle = a.getStyle().getRotationAngle();
-//            cellRotationAngle = 0; // TODO
-//            style.append("writing-mode: lr-bt ;")
-//                    .append("transform: rotate(-").append(cellRotationAngle).append("deg);")
-//                    .append("-webkit-transform: rotate(-").append(cellRotationAngle).append("deg);")
-//                    .append("-moz-transform: rotate(-").append(cellRotationAngle).append("deg);")
-//                    .append("-ms-transform: rotate(-").append(cellRotationAngle).append("deg);")
-//                    .append("-o-transform: rotate(-").append(cellRotationAngle).append("deg);");
             com.aspose.cells.Color cellTextColor = a.getStyle().getFont().getColor();
             style.append("color:")
                     .append(asposeColorToCssColor(cellTextColor, true))
@@ -235,15 +226,6 @@ public class CellsService {
         }
 
         c.setStyle(style.toString());
-
-        if (a.getMergedRange() != null) {
-            if (a.getColumn() == a.getMergedRange().getFirstColumn()) {
-//                c.setColspan(a.getMergedRange().getColumnCount());
-            }
-            if (a.getRow() == a.getMergedRange().getFirstRow()) {
-//                c.setRowspan(a.getMergedRange().getRowCount());
-            }
-        }
 
         return c;
     }

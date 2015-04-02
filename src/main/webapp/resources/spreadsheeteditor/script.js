@@ -131,8 +131,6 @@ function singleCellSelectionHandler(datatable, cell) {
     if (cellFontSize) {
         PF('fontSizeOptionSelector').selectValue(cellFontSize);
     }
-//  PF('fontColorSelector').input.val($(cell).find('.ui-cell-editor-output div')[0].style.color);
-//  PF('fillColorSelector').input.val($(cell).find('.ui-cell-editor-output div')[0].style.backgroundColor);
     ['al', 'ac', 'ar', 'aj'].forEach(function(v) {
         if ($(cell).find('.ui-cell-editor-output div').hasClass(v)) {
             // TODO: save the value to PF('alignOptionSelector');

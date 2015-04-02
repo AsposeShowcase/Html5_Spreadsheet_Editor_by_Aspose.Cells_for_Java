@@ -204,12 +204,6 @@ public class WorksheetView implements Serializable {
             return;
         }
 
-//        Row r = new Row.Builder().setId(newRowId).build();
-//        cells.getRows(workbook.getCurrent()).add(newRowId, r);
-//
-//        for (int i = 0; i < cells.getColumns(workbook.getCurrent()).size(); i++) {
-//            r.putCell(i, cells.fromBlank(i, newRowId));
-//        }
         purge();
         reloadRowHeight(newRowId);
     }
