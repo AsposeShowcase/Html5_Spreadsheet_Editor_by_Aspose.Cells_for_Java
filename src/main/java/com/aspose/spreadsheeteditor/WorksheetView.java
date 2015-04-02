@@ -1,14 +1,10 @@
 package com.aspose.spreadsheeteditor;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
+import java.awt.Color;
 import java.io.Serializable;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import javax.annotation.PostConstruct;
+import java.util.logging.Logger;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
@@ -16,20 +12,19 @@ import javax.inject.Named;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.CellEditEvent;
 import org.primefaces.event.ColumnResizeEvent;
-import org.primefaces.event.FileUploadEvent;
-import org.primefaces.model.DefaultStreamedContent;
-import org.primefaces.model.StreamedContent;
 
 @Named(value = "worksheet")
 @ViewScoped
 public class WorksheetView implements Serializable {
 
-    private String loadedWorkbook;
-    private Format outputFormat = Format.XLSX;
-    private String sourceUrl;
+    private static final Logger LOGGER = Logger.getLogger(WorksheetView.class.getName());
+
     private int currentColumnId;
     private int currentRowId;
     private String currentCellClientId;
+
+    @Inject
+    private WorkbookService workbook;
 
     @Inject
     private CellsService cells;
@@ -43,183 +38,45 @@ public class WorksheetView implements Serializable {
     @Inject
     FormattingService formatting;
 
-    @PostConstruct
-    private void init() {
-        String requestedSourceUrl = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("url");
-        if (requestedSourceUrl != null) {
-            try {
-                this.sourceUrl = new URL(requestedSourceUrl).toString();
-                this.loadFromUrl();
-            } catch (MalformedURLException x) {
-                msg.sendMessageDialog("The specified URL is invalid", requestedSourceUrl);
-            }
-        }
-    }
-
-    public String getLoadedWorkbook() {
-        return this.loadedWorkbook;
-    }
-
-    public void setLoadedWorkbook(String id) {
-        this.loadedWorkbook = id;
-    }
-
-    public String getSourceUrl() {
-        return sourceUrl;
-    }
-
-    public void setSourceUrl(String sourceUrl) {
-        this.sourceUrl = sourceUrl;
-    }
-
-    public String getActiveSheet() {
-        if (this.isLoaded()) {
-            int i = getAsposeWorkbook().getWorksheets().getActiveSheetIndex();
-            return getAsposeWorkbook().getWorksheets().get(i).getName();
-        }
-        return null;
-    }
-
-    /**
-     * Switch to `name`d sheet. If there does not exist any sheet with the given
-     * name, the active sheet is renamed to the given name.
-     *
-     * The rule is derived from the following use-case.
-     *
-     * If the user select a sheet from drop-down menu, this means that the sheet
-     * already exist. So we can switch to that sheet. If the sheet does not
-     * exist, we can say that the user has not selected it from drop-down but
-     * directly modified the name of existing in the input text box.
-     *
-     * @param name Worksheet name
-     */
-    public void setActiveSheet(String name) {
-        com.aspose.cells.Worksheet w = getAsposeWorkbook().getWorksheets().get(name);
-        if (w != null) {
-            int i = w.getIndex();
-            getAsposeWorkbook().getWorksheets().setActiveSheetIndex(i);
-        } else {
-            getAsposeWorksheet().setName(name);
-        }
-
-        purge();
-    }
-
     public boolean isLoaded() {
-        return this.loadedWorkbook != null;
-    }
-
-    public Format getOutputFormat() {
-        return this.outputFormat;
-    }
-
-    public void setOutputFormat(Format outputFormat) {
-        this.outputFormat = outputFormat;
-    }
-
-    public void loadBlank() {
-        this.loadedWorkbook = loader.fromBlank();
-    }
-
-    public StreamedContent getOutputFile(int saveFormat) {
-        byte[] buf;
-        String ext = null;
-        switch (saveFormat) {
-            case com.aspose.cells.SaveFormat.EXCEL_97_TO_2003:
-                ext = "xls";
-                break;
-            case com.aspose.cells.SaveFormat.XLSX:
-                ext = "xlsx";
-                break;
-            case com.aspose.cells.SaveFormat.XLSM:
-                ext = "xlsm";
-                break;
-            case com.aspose.cells.SaveFormat.XLSB:
-                ext = "xlsb";
-                break;
-            case com.aspose.cells.SaveFormat.XLTX:
-                ext = "xltx";
-                break;
-            case com.aspose.cells.SaveFormat.XLTM:
-                ext = "xltm";
-                break;
-            case com.aspose.cells.SaveFormat.SPREADSHEET_ML:
-                ext = "xml";
-                break;
-            case com.aspose.cells.SaveFormat.PDF:
-                ext = "pdf";
-                break;
-            case com.aspose.cells.SaveFormat.ODS:
-                ext = "ods";
-                break;
-        }
-
-        try {
-            ByteArrayOutputStream out = new ByteArrayOutputStream();
-            getAsposeWorkbook().save(out, saveFormat);
-            buf = out.toByteArray();
-        } catch (Exception x) {
-            throw new RuntimeException(x);
-        }
-
-        return new DefaultStreamedContent(new ByteArrayInputStream(buf), "application/octet-stream", "Spreadsheet." + ext);
-    }
-
-    public void loadFromUrl() {
-        if (this.sourceUrl == null) {
-            return;
-        }
-
-        loadedWorkbook = loader.fromUrl(this.sourceUrl);
-    }
-
-    public com.aspose.cells.Workbook getAsposeWorkbook() {
-        return loader.get(loadedWorkbook);
+        return workbook.isLoaded();
     }
 
     public int getDefaultColumnWidth() {
         try {
             return getAsposeWorksheet().getCells().getStandardWidthPixels();
         } catch (com.aspose.cells.CellsException | NullPointerException x) {
+            LOGGER.throwing(null, null, x);
             return 64;
         }
     }
 
     public List<Integer> getColumnWidth() {
-        return cells.getColumnWidth(loadedWorkbook);
+        return cells.getColumnWidth(workbook.getCurrent());
     }
 
     public List<Integer> getRowHeight() {
-        return cells.getRowHeight(loadedWorkbook);
+        return cells.getRowHeight(workbook.getCurrent());
     }
 
     private com.aspose.cells.Worksheet getAsposeWorksheet() {
-        return getAsposeWorkbook().getWorksheets().get(getAsposeWorkbook().getWorksheets().getActiveSheetIndex());
-    }
-
-    private com.aspose.cells.Worksheet getAsposeWorksheet(int index) {
-        return getAsposeWorkbook().getWorksheets().get(index);
-    }
-
-    public List<String> getSheets() {
-        ArrayList<String> list = new ArrayList<>();
-        if (this.isLoaded()) {
-            for (int i = 0; i < getAsposeWorkbook().getWorksheets().getCount(); i++) {
-                list.add(String.valueOf(getAsposeWorkbook().getWorksheets().get(i).getName()));
-            }
-        }
-        return list;
+        com.aspose.cells.Workbook w = workbook.getAsposeWorkbook();
+        return w.getWorksheets().get(w.getWorksheets().getActiveSheetIndex());
     }
 
     public List<Column> getColumns() {
-        return cells.getColumns(loadedWorkbook);
+        return cells.getColumns(workbook.getCurrent());
     }
 
     public List<Row> getRows() {
-        return cells.getRows(loadedWorkbook);
+        return cells.getRows(workbook.getCurrent());
     }
 
     public void applyCellFormatting() {
+        if (!isLoaded()) {
+            return;
+        }
+
         com.aspose.cells.Cell c = getAsposeWorksheet().getCells().get(currentRowId, currentColumnId);
         com.aspose.cells.Style s = c.getStyle();
 
@@ -241,6 +98,17 @@ public class WorksheetView implements Serializable {
             case "aj":
                 s.setHorizontalAlignment(com.aspose.cells.TextAlignmentType.JUSTIFY);
                 break;
+            default:
+        }
+        try {
+            s.getFont().setColor(com.aspose.cells.Color.fromArgb(Color.decode("0x" + formatting.getFontColorSelectionOption()).getRGB()));
+        } catch (NumberFormatException x) {
+            // Ignore
+        }
+        try {
+            s.setForegroundArgbColor(Color.decode("0x" + formatting.getFillColorSelectionOption()).getRGB());
+        } catch (NumberFormatException x) {
+            // Ignore
         }
 
         c.setStyle(s);
@@ -272,48 +140,10 @@ public class WorksheetView implements Serializable {
         this.currentCellClientId = currentCellClientId;
     }
 
-    public void onFileUpload(FileUploadEvent e) {
-        try {
-            loadedWorkbook = loader.fromInputStream(e.getFile().getInputstream(), e.getFile().getFileName());
-            purge();
-        } catch (IOException x) {
-            throw new RuntimeException(x);
-        }
-    }
-
-    public void onAddNewSheet() {
-        if (isLoaded()) {
-            try {
-                int i = getAsposeWorkbook().getWorksheets().add();
-                getAsposeWorkbook().getWorksheets().setActiveSheetIndex(i);
-                purge();
-            } catch (com.aspose.cells.CellsException cx) {
-                msg.sendMessage("New Worksheet", cx.getMessage());
-            }
-        }
-    }
-
-    public void onRemoveActiveSheet() {
-        if (isLoaded()) {
-            try {
-                int i = getAsposeWorkbook().getWorksheets().getActiveSheetIndex();
-                getAsposeWorkbook().getWorksheets().removeAt(i);
-                if (getAsposeWorkbook().getWorksheets().getCount() == 0) {
-                    int j = getAsposeWorkbook().getWorksheets().add();
-                    getAsposeWorkbook().getWorksheets().setActiveSheetIndex(j);
-                }
-                purge();
-            } catch (com.aspose.cells.CellsException cx) {
-                msg.sendMessage("Could not remove sheet", cx.getMessage());
-            }
-        }
-    }
-
     public void onCellEdit(CellEditEvent e) {
-        Cell oldCell = (Cell) e.getOldValue();
         Cell newCell = (Cell) e.getNewValue();
-        int columnId = newCell.getRowId();
-        int rowId = newCell.getColumnId();
+        int columnId = newCell.getColumnId();
+        int rowId = newCell.getRowId();
 
         try {
             com.aspose.cells.Cell c = getAsposeWorksheet().getCells().get(rowId, columnId);
@@ -322,9 +152,9 @@ public class WorksheetView implements Serializable {
             } else {
                 c.putValue(newCell.getValue(), true);
             }
-            cells.putCell(loadedWorkbook, columnId, rowId, newCell);
+            cells.putCell(workbook.getCurrent(), columnId, rowId, newCell);
         } catch (com.aspose.cells.CellsException x) {
-            x.printStackTrace();
+            LOGGER.throwing(null, null, x);
         }
     }
 
@@ -337,6 +167,7 @@ public class WorksheetView implements Serializable {
         try {
             getAsposeWorksheet().getCells().setColumnWidthPixel(columnId, e.getWidth());
         } catch (com.aspose.cells.CellsException cx) {
+            LOGGER.throwing(null, null, cx);
             msg.sendMessage("Could not resize column", cx.getMessage());
             return;
         }
@@ -348,6 +179,7 @@ public class WorksheetView implements Serializable {
         try {
             getAsposeWorksheet().getCells().insertRows(currentRowId, 1, true);
         } catch (com.aspose.cells.CellsException cx) {
+            LOGGER.throwing(null, null, cx);
             msg.sendMessage("Could not add row", cx.getMessage());
             return;
         }
@@ -367,14 +199,15 @@ public class WorksheetView implements Serializable {
         try {
             getAsposeWorksheet().getCells().insertRows(newRowId, 1, true);
         } catch (com.aspose.cells.CellsException cx) {
+            LOGGER.throwing(null, null, cx);
             msg.sendMessage("Could not add row", cx.getMessage());
             return;
         }
 
 //        Row r = new Row.Builder().setId(newRowId).build();
-//        cells.getRows(loadedWorkbook).add(newRowId, r);
+//        cells.getRows(workbook.getCurrent()).add(newRowId, r);
 //
-//        for (int i = 0; i < cells.getColumns(loadedWorkbook).size(); i++) {
+//        for (int i = 0; i < cells.getColumns(workbook.getCurrent()).size(); i++) {
 //            r.putCell(i, cells.fromBlank(i, newRowId));
 //        }
         purge();
@@ -385,11 +218,12 @@ public class WorksheetView implements Serializable {
         try {
             getAsposeWorksheet().getCells().deleteRows(currentRowId, 1, true);
         } catch (com.aspose.cells.CellsException cx) {
+            LOGGER.throwing(null, null, cx);
             msg.sendMessage("Could not delete row", cx.getMessage());
             return;
         }
 
-        cells.getRows(loadedWorkbook).remove(currentRowId);
+        cells.getRows(workbook.getCurrent()).remove(currentRowId);
         getRowHeight().remove(currentRowId);
         purge();
     }
@@ -398,6 +232,7 @@ public class WorksheetView implements Serializable {
         try {
             getAsposeWorksheet().getCells().insertColumns(getCurrentColumnId(), 1, true);
         } catch (com.aspose.cells.CellsException cx) {
+            LOGGER.throwing(null, null, cx);
             msg.sendMessage("Could not add column", cx.getMessage());
             return;
         }
@@ -411,6 +246,7 @@ public class WorksheetView implements Serializable {
         try {
             getAsposeWorksheet().getCells().insertColumns(newColumnId, 1, true);
         } catch (com.aspose.cells.CellsException cx) {
+            LOGGER.throwing(null, null, cx);
             msg.sendMessage("Could not add column", cx.getMessage());
             return;
         }
@@ -423,11 +259,12 @@ public class WorksheetView implements Serializable {
         try {
             getAsposeWorksheet().getCells().deleteColumns(currentColumnId, 1, true);
         } catch (com.aspose.cells.CellsException cx) {
+            LOGGER.throwing(null, null, cx);
             msg.sendMessage("Could not delete column", cx.getMessage());
             return;
         }
 
-        cells.getColumns(loadedWorkbook).remove(currentColumnId);
+        cells.getColumns(workbook.getCurrent()).remove(currentColumnId);
         getRowHeight().remove(currentColumnId);
         purge();
     }
@@ -534,7 +371,7 @@ public class WorksheetView implements Serializable {
     }
 
     public List<String> getFonts() {
-        ArrayList<String> list = new ArrayList<>();
+        List<String> list = new ArrayList<>();
         if (isLoaded()) {
             // TODO: get list of fonts used by the workboook
         }
@@ -563,10 +400,10 @@ public class WorksheetView implements Serializable {
     private void reloadCell(int columnId, int rowId) {
         com.aspose.cells.Cell a = getAsposeWorksheet().getCells().get(rowId, columnId);
         Cell c = cells.fromAsposeCell(a);
-        cells.getRows(loadedWorkbook).get(rowId).putCell(columnId, c);
+        cells.getRows(workbook.getCurrent()).get(rowId).putCell(columnId, c);
     }
 
     public void purge() {
-        loader.buildCellsCache(loadedWorkbook);
+        loader.buildCellsCache(workbook.getCurrent());
     }
 }

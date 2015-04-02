@@ -168,3 +168,8 @@ body {
     height: auto !important;
 }
 
+.sheet-cell-toolbar .ui-toolbar-group-left
+{
+    width: 100%;
+}
+

@@ -1,6 +1,6 @@
 package com.aspose.spreadsheeteditor;
 
-import java.awt.Color;
+import java.io.Serializable;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 
@@ -10,7 +10,7 @@ import javax.inject.Named;
  */
 @Named(value = "formatting")
 @ViewScoped
-public class FormattingService {
+public class FormattingService implements Serializable {
 
     private boolean boldOptionEnabled;
     private boolean italicOptionEnabled;
@@ -18,7 +18,8 @@ public class FormattingService {
     private String fontSelectionOption;
     private int fontSizeOption;
     private String alignSelectionOption;
-    private Color fontColorSelectionOption;
+    private String fontColorSelectionOption;
+    private String fillColorSelectionOption;
 
     public boolean isBoldOptionEnabled() {
         return boldOptionEnabled;
@@ -68,12 +69,21 @@ public class FormattingService {
         this.alignSelectionOption = alignSelectionOption;
     }
 
-    public Color getFontColorSelectionOption() {
+    public String getFontColorSelectionOption() {
         return this.fontColorSelectionOption;
     }
 
-    public void setFontColorSelectionOption(Color c) {
+    public void setFontColorSelectionOption(String c) {
         this.fontColorSelectionOption = c;
     }
 
+    public String getFillColorSelectionOption() {
+        return this.fillColorSelectionOption;
+    }
+
+    public void setFillColorSelectionOption(String c) {
+        this.fillColorSelectionOption = c;
+    }
+
 }
+

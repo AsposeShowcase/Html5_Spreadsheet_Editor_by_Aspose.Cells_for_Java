@@ -11,7 +11,7 @@ import javax.inject.Inject;
 public class CellConverter implements Converter {
 
     @Inject
-    private WorksheetView worksheet;
+    private WorkbookService workbook;
 
     @Inject
     private CellsService cells;
@@ -21,7 +21,7 @@ public class CellConverter implements Converter {
         int columnId = (Integer) ((ValueExpression) component.getPassThroughAttributes().get("data-columnId")).getValue(context.getELContext());
         int rowId = (Integer) ((ValueExpression) component.getPassThroughAttributes().get("data-rowId")).getValue(context.getELContext());
 
-        Cell cell = cells.getCell(worksheet.getLoadedWorkbook(), columnId, rowId);
+        Cell cell = cells.getCell(workbook.getCurrent(), columnId, rowId);
         if (value.trim().startsWith("=")) {
             cell.setFormula(value.trim());
         } else {

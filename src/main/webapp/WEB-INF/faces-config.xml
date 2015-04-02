@@ -19,6 +19,11 @@
             <renderer-type>org.primefaces.component.DataTableRenderer</renderer-type>
             <renderer-class>com.aspose.spreadsheeteditor.TableRenderer</renderer-class>
         </renderer>
+        <renderer>
+            <component-family>org.primefaces.component</component-family>
+            <renderer-type>org.primefaces.component.CellEditorRenderer</renderer-type>
+            <renderer-class>com.aspose.spreadsheeteditor.InlineEditorRenderer</renderer-class>
+        </renderer>
     </render-kit>
 </faces-config>
 

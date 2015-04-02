@@ -1,7 +1,6 @@
 package com.aspose.spreadsheeteditor;
 
 import java.io.Serializable;
-import javax.annotation.PostConstruct;
 
 /**
  *
@@ -18,10 +17,6 @@ public class Column implements Serializable {
     public Column(int id, String name) {
         this.id = id;
         this.name = this.header = this.property = name;
-    }
-
-    @PostConstruct
-    public void init() {
     }
 
     public String getHeader() {

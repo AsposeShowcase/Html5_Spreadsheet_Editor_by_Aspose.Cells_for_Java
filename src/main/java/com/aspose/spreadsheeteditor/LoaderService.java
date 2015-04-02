@@ -7,6 +7,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
+import java.util.logging.Logger;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -23,7 +24,9 @@ public class LoaderService {
         AsposeLicense.load();
     }
 
-    private HashMap<String, com.aspose.cells.Workbook> workbooks = new HashMap<>();
+    private static final Logger LOGGER = Logger.getLogger(LoaderService.class.getName());
+
+    private HashMap<String, com.aspose.cells.Workbook> workbooks = new HashMap<>(); // NOSONAR
 
     @Inject
     private MessageService msg;
@@ -50,13 +53,17 @@ public class LoaderService {
         try (InputStream i = new URL(url).openStream()) {
             w = new com.aspose.cells.Workbook(i);
         } catch (MalformedURLException murlx) {
+            LOGGER.throwing(null, null, murlx);
             msg.sendMessage("The specified URL is invalid.", url);
             return null;
         } catch (IOException iox) {
+            LOGGER.throwing(null, null, iox);
             msg.sendMessage("Sorry, there was a problem opening the specified file.", iox.getMessage());
             return null;
         } catch (Exception x) {
-            throw new RuntimeException(x);
+            LOGGER.throwing(null, null, x);
+            msg.sendMessage("Something went wrong", x.getMessage());
+            return null;
         }
 
         String key = generateKey();
@@ -75,9 +82,11 @@ public class LoaderService {
         try (InputStream i = s) {
             w = new com.aspose.cells.Workbook(i);
         } catch (IOException iox) {
+            LOGGER.throwing(null, null, iox);
             msg.sendMessage("Could not read the file from source", name);
             return null;
         } catch (Exception x) {
+            LOGGER.throwing(null, null, x);
             msg.sendMessage("Could not load the workbook", name);
             return null;
         }
@@ -96,6 +105,10 @@ public class LoaderService {
         return workbooks.get(id);
     }
 
+    public void unload(String id) {
+        workbooks.remove(id);
+    }
+
     public void buildCellsCache(String key) {
         com.aspose.cells.Workbook wb = workbooks.get(key);
         com.aspose.cells.Worksheet ws = wb.getWorksheets().get(wb.getWorksheets().getActiveSheetIndex());
@@ -104,8 +117,8 @@ public class LoaderService {
         int maxRow = 20 + ws.getCells().getMaxRow() + 1;
         maxRow = maxRow + 10 - (maxRow % 10);
 
-        ArrayList<Column> columns = new ArrayList<>(maxColumn);
-        ArrayList<Row> rows = new ArrayList<>(maxRow);
+        ArrayList<Column> columns = new ArrayList<>(maxColumn); // NOSONAR
+        ArrayList<Row> rows = new ArrayList<>(maxRow); // NOSONAR
 
         for (int i = 0; i < maxColumn; i++) {
             columns.add(i, new Column(i, com.aspose.cells.CellsHelper.columnIndexToName(i)));
@@ -137,7 +150,7 @@ public class LoaderService {
         com.aspose.cells.Workbook wb = workbooks.get(key);
         com.aspose.cells.Worksheet ws = wb.getWorksheets().get(wb.getWorksheets().getActiveSheetIndex());
 
-        ArrayList<Integer> columnWidth = new ArrayList<>();
+        ArrayList<Integer> columnWidth = new ArrayList<>(); // NOSONAR
         for (int i = 0; i < cells.getColumns(key).size(); i++) {
             columnWidth.add(i, ws.getCells().getColumnWidthPixel(i));
         }
@@ -148,7 +161,7 @@ public class LoaderService {
         com.aspose.cells.Workbook wb = workbooks.get(key);
         com.aspose.cells.Worksheet ws = wb.getWorksheets().get(wb.getWorksheets().getActiveSheetIndex());
 
-        ArrayList<Integer> rowHeight = new ArrayList<>();
+        ArrayList<Integer> rowHeight = new ArrayList<>(); // NOSONAR
 
         for (int i = 0; i < cells.getRows(key).size(); i++) {
             rowHeight.add(i, ws.getCells().getRowHeightPixel(i));

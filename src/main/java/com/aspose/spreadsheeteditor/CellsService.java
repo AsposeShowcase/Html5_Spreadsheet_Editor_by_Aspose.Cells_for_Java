@@ -1,7 +1,9 @@
 package com.aspose.spreadsheeteditor;
 
+import java.awt.Color;
 import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Logger;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -14,11 +16,13 @@ import javax.inject.Named;
 @ApplicationScoped
 public class CellsService {
 
-    private HashMap<String, List<Cell>> cells = new HashMap<>();
-    private HashMap<String, List<Column>> columns = new HashMap<>();
-    private HashMap<String, List<Row>> rows = new HashMap<>();
-    private HashMap<String, List<Integer>> columnWidth = new HashMap<>();
-    private HashMap<String, List<Integer>> rowHeight = new HashMap<>();
+    private static final Logger LOGGER = Logger.getLogger(CellsService.class.getName());
+
+    private HashMap<String, List<Cell>> cells = new HashMap<>(); // NOSONAR
+    private HashMap<String, List<Column>> columns = new HashMap<>(); // NOSONAR
+    private HashMap<String, List<Row>> rows = new HashMap<>(); // NOSONAR
+    private HashMap<String, List<Integer>> columnWidth = new HashMap<>(); // NOSONAR
+    private HashMap<String, List<Integer>> rowHeight = new HashMap<>(); // NOSONAR
 
     @Inject
     private MessageService msg;
@@ -39,12 +43,20 @@ public class CellsService {
         columns.put(key, c);
     }
 
+    void removeColumns(String key) {
+        columns.remove(key);
+    }
+
     public List<Row> getRows(String key) {
         return rows.get(key);
     }
 
     public void putRows(String key, List<Row> r) {
         rows.put(key, r);
+    }
+
+    void removeRows(String key) {
+        rows.remove(key);
     }
 
     public Cell getCell(String key, int column, int row) {
@@ -63,6 +75,10 @@ public class CellsService {
         columnWidth.put(key, c);
     }
 
+    void removeColumnWidth(String key) {
+        columnWidth.remove(key);
+    }
+
     public List<Integer> getRowHeight(String key) {
         return rowHeight.get(key);
     }
@@ -71,21 +87,27 @@ public class CellsService {
         rowHeight.put(key, r);
     }
 
+    void removeRowHeight(String key) {
+        rowHeight.remove(key);
+    }
+
     public Cell fromBlank(int columnId, int rowId) {
-        return new Cell().setColumnId(columnId).setRowId(rowId);
+        return new Cell()
+                .setColumnId(columnId)
+                .setRowId(rowId)
+                .setName(com.aspose.cells.CellsHelper.cellIndexToName(rowId, columnId));
     }
 
     public Cell fromAsposeCell(com.aspose.cells.Cell a) {
         // a = Aspose.Cells' definition of a cell
         // c = Spreassheet's definition of a cell
 
-        Cell c = new Cell()
-                .setColumnId(a.getColumn())
-                .setRowId(a.getRow());
+        Cell c = fromBlank(a.getColumn(), a.getRow());
 
         try {
             a.calculate(true, null);
         } catch (com.aspose.cells.CellsException cx) {
+            LOGGER.throwing(null, null, cx);
             msg.sendMessage("Cell recalculation failure", cx.getMessage());
         }
 
@@ -93,17 +115,13 @@ public class CellsService {
             c.setFormula(a.getFormula())
                     .setValue(a.getStringValueWithoutFormat());
         } catch (Exception x) {
+            LOGGER.throwing(null, null, x);
             msg.sendMessage("Cell value error", x.getMessage());
         }
 
         StringBuilder style = new StringBuilder();
 
         try {
-//            com.aspose.cells.Color cellBgColor = a.getStyle().getBackgroundColor();
-//            style.append("background-color:")
-//                    .append(asposeColorToCssColor(cellBgColor, false))
-//                    .append(";");
-
             com.aspose.cells.Color cellFgColor = a.getStyle().getForegroundColor();
             style.append("background-color:")
                     .append(asposeColorToCssColor(cellFgColor, false))
@@ -140,6 +158,7 @@ public class CellsService {
                 case com.aspose.cells.FontUnderlineType.WORDS:
                     c.addClass("u").setUnderline(true);
                     break;
+                default:
             }
 
             switch (a.getStyle().getFont().getStrikeType()) {
@@ -147,6 +166,7 @@ public class CellsService {
                 case com.aspose.cells.TextStrikeType.DOUBLE:
                     c.addClass("sts");
                     break;
+                default:
             }
 
             switch (a.getStyle().getFont().getCapsType()) {
@@ -156,14 +176,13 @@ public class CellsService {
                 case com.aspose.cells.TextCapsType.SMALL:
                     c.addClass("sc");
                     break;
+                default:
             }
 
-//            if (a.getStyle().getFont().getSize()) {
             style
                     .append("font-size:")
                     .append(a.getStyle().getFont().getSize())
                     .append("pt;");
-//            }
 
             switch (a.getStyle().getHorizontalAlignment()) {
                 case com.aspose.cells.TextAlignmentType.GENERAL:
@@ -180,6 +199,7 @@ public class CellsService {
                 case com.aspose.cells.TextAlignmentType.JUSTIFY:
                     c.addClass("aj");
                     break;
+                default:
             }
 
             switch (a.getStyle().getVerticalAlignment()) {
@@ -193,6 +213,7 @@ public class CellsService {
 //                    style.append("vertical-align: bottom;");
                     c.addClass("ab");
                     break;
+                default:
             }
 
 //            int cellRotationAngle = a.getStyle().getRotationAngle();
@@ -209,6 +230,7 @@ public class CellsService {
                     .append(";");
 
         } catch (Exception x) {
+            LOGGER.throwing(null, null, x);
             msg.sendMessage("Cell style error", x.getMessage());
         }
 
@@ -227,26 +249,26 @@ public class CellsService {
     }
 
     private String asposeColorToCssColor(com.aspose.cells.Color color, boolean emptyIsBlack) {
-        int r, g, b;
-
-        if (color.isEmpty()) {
-            if (emptyIsBlack) {
-                r = g = b = 0;
-            } else {
-                r = g = b = 255;
-            }
-        } else {
-            r = color.getR() & 0xFF;
-            g = color.getG() & 0xFF;
-            b = color.getB() & 0xFF;
-        }
+        Color c = asposeColorToAwtColor(color, emptyIsBlack);
 
         return new StringBuffer("rgb(")
-                .append(r & 0xFF)
+                .append(c.getRed())
                 .append(",")
-                .append(g & 0xFF)
+                .append(c.getGreen())
                 .append(",")
-                .append(b & 0xFF)
+                .append(c.getBlue())
                 .append(")").toString();
+    }
+
+    private Color asposeColorToAwtColor(com.aspose.cells.Color color, boolean emptyIsBlack) {
+        if (color.isEmpty()) {
+            if (emptyIsBlack) {
+                return Color.BLACK;
+            } else {
+                return Color.WHITE;
+            }
+        }
+
+        return new Color(color.toArgb());
     }
 }

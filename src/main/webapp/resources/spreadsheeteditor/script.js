@@ -28,49 +28,41 @@ function hideRowHeightDialog() {
     return false;
 }
 
+function saveFormulaBarContents() {
+    var newContents = PF('formulaBar').jq.val();
+    $(sheet_datatable.selectedCell).find('.ui-cell-editor-input input').val(newContents);
+    sheet_datatable.saveCell($(sheet_datatable.selectedCell));
+
+    return false;
+}
+
+function showInsertFunctionDialog() {
+    PF('insertFunctionDialog').show();
+    return false;
+}
+
+function hideInsertFunctionDialog() {
+    PF('insertFunctionDialog').hide();
+    return false;
+}
+
+function showSupportedFunctionsPage() {
+    PF('insertFunctionDialog').hide();
+    window.open('http://www.aspose.com/docs/display/cellsjava/Supported+Formula+Functions');
+    return false;
+}
+
+var sheet_datatable;
 PrimeFaces.widget.DataTable = PrimeFaces.widget.DataTable.extend({
     bindEditEvents: function() {
+        sheet_datatable = this;
         var $this = this;
         // From primefaces' datatable.js
 
         var cellSelector = '> tr > td.ui-editable-column';
         this.tbody.off('click.datatable-cell', cellSelector)
                 .on('click.datatable-cell', cellSelector, null, function(e) {
-                    var columnId = $(this).find('.ui-cell-editor-input input').attr('data-columnid');
-                    var rowId = $(this).find('.ui-cell-editor-input input').attr('data-rowid');
-                    var clientId = $(this).find('.ui-cell-editor').attr('id');
-
-                    PF('currentColumnIdValue').jq.val(columnId);
-                    PF('currentRowIdValue').jq.val(rowId);
-                    PF('currentCellClientIdValue').jq.val(clientId);
-                    if ($(this).find('.ui-cell-editor-output div').hasClass('b')) {
-                        PF('boldOptionButton').check();
-                    } else {
-                        PF('boldOptionButton').uncheck();
-                    }
-                    if ($(this).find('.ui-cell-editor-output div').hasClass('i')) {
-                        PF('italicOptionButton').check();
-                    } else {
-                        PF('italicOptionButton').uncheck();
-                    }
-                    if ($(this).find('.ui-cell-editor-output div').hasClass('u')) {
-                        PF('underlineOptionButton').check();
-                    } else {
-                        PF('underlineOptionButton').uncheck();
-                    }
-                    PF('fontOptionSelector').selectValue($(this).find('.ui-cell-editor-output div').css('font-family').slice(1, -1));
-                    PF('fontSizeOptionSelector').selectValue($(this).find('.ui-cell-editor-output div')[0].style.fontSize.replace('pt', ''));
-                    ['al', 'ac', 'ar', 'aj'].forEach(function(v) {
-                        if ($(this).find('.ui-cell-editor-output div').hasClass(v)) {
-                            // TODO: save the value to PF('alignOptionSelector');
-                        }
-                    });
-                    PF('currentColumnWidthValue').jq.val($(this).width());
-                    PF('currentRowHeightValue').jq.val($(this).height());
-
-                    $($this.selectedCell).removeClass('sheet-selected-cell');
-                    $(this).addClass('sheet-selected-cell');
-                    $this.selectedCell = this;
+                    singleCellSelectionHandler($this, this);
                 });
 
         this.tbody.off('dblclick.datatable-cell', cellSelector)
@@ -79,6 +71,8 @@ PrimeFaces.widget.DataTable = PrimeFaces.widget.DataTable.extend({
                     var cell = $(this);
                     if (!cell.hasClass('ui-cell-editing')) {
                         $this.showCellEditor($(this));
+                        var inp = $(this).find('.ui-cell-editor-input input')[0];
+                        inp.setSelectionRange(inp.value.length + 1, inp.value.length + 1);
                     }
                 });
 
@@ -104,12 +98,80 @@ function updateCurrentCells() {
     ]);
 }
 
+function singleCellSelectionHandler(datatable, cell) {
+    var columnId = $(cell).find('.ui-cell-editor-input input').attr('data-columnid');
+    var rowId = $(cell).find('.ui-cell-editor-input input').attr('data-rowid');
+    var cellName = $(cell).find('.ui-cell-editor-input input').attr('data-cellname');
+    var clientId = $(cell).find('.ui-cell-editor').attr('id');
+
+    PF('currentColumnIdValue').jq.val(columnId);
+    PF('currentRowIdValue').jq.val(rowId);
+    PF('currentCellNameValue').jq.val(cellName);
+    PF('currentCellClientIdValue').jq.val(clientId);
+    if ($(cell).find('.ui-cell-editor-output div').hasClass('b')) {
+        PF('boldOptionButton').check();
+    } else {
+        PF('boldOptionButton').uncheck();
+    }
+    if ($(cell).find('.ui-cell-editor-output div').hasClass('i')) {
+        PF('italicOptionButton').check();
+    } else {
+        PF('italicOptionButton').uncheck();
+    }
+    if ($(cell).find('.ui-cell-editor-output div').hasClass('u')) {
+        PF('underlineOptionButton').check();
+    } else {
+        PF('underlineOptionButton').uncheck();
+    }
+    var cellFont = $(cell).find('.ui-cell-editor-output div').css('font-family').slice(1, -1);
+    if (cellFont) {
+        PF('fontOptionSelector').selectValue(cellFont);
+    }
+    var cellFontSize = $(cell).find('.ui-cell-editor-output div')[0].style.fontSize.replace('pt', '');
+    if (cellFontSize) {
+        PF('fontSizeOptionSelector').selectValue(cellFontSize);
+    }
+//  PF('fontColorSelector').input.val($(cell).find('.ui-cell-editor-output div')[0].style.color);
+//  PF('fillColorSelector').input.val($(cell).find('.ui-cell-editor-output div')[0].style.backgroundColor);
+    ['al', 'ac', 'ar', 'aj'].forEach(function(v) {
+        if ($(cell).find('.ui-cell-editor-output div').hasClass(v)) {
+            // TODO: save the value to PF('alignOptionSelector');
+        }
+    });
+    PF('currentColumnWidthValue').jq.val($(cell).width());
+    PF('currentRowHeightValue').jq.val($(cell).height());
+    PF('formulaBar').jq.val($(cell).find('.ui-cell-editor-input input').val());
+
+    $(datatable.selectedCell).removeClass('sheet-selected-cell');
+    $(cell).addClass('sheet-selected-cell');
+    datatable.selectedCell = cell;
+}
+
 setInterval(function() {
-    if (typeof $ === 'undefined' && !$('#sheet .ui-datatable').length) {
-        return;
+
+    try {
+        $('#sheet .ui-datatable').height($(window).height() - $('#sheet .ui-datatable').position().top - 1);
+    } catch (x) {
     }
 
-    $('#sheet .ui-datatable').height($(window).height() - $('#sheet .ui-datatable').position().top - 1);
+    try {
+        var _osidufasiuf = PF('fontColorSelector').cfg.onHide;
+        PF('fontColorSelector').overlay.data('colorpicker').onHide = function(e) {
+            _osidufasiuf.apply(this, [arguments]);
+            PF('applyFormattingButton').getJQ().click();
+        };
+    } catch (x) {
+    }
+
+    try {
+        var _njksiuhgvbd = PF('fillColorSelector').cfg.onHide;
+        PF('fillColorSelector').overlay.data('colorpicker').onHide = function(e) {
+            _njksiuhgvbd.apply(this, [arguments]);
+            PF('applyFormattingButton').getJQ().click();
+        };
+    } catch (x) {
+    }
+
 }, 786);
 
 $(document).ready(function() {

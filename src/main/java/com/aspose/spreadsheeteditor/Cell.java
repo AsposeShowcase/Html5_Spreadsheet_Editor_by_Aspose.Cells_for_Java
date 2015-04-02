@@ -6,10 +6,11 @@ import java.util.StringJoiner;
 
 public class Cell implements Serializable {
 
+    private String name;
     private String value;
     private String formula;
     private String style;
-    private HashSet<String> cssClass = new HashSet<>();
+    private HashSet<String> cssClass = new HashSet<>(); //NOSONAR
     private int columnId;
     private int rowId;
     private int colspan = 0;
@@ -18,7 +19,13 @@ public class Cell implements Serializable {
     private boolean italic;
     private boolean underline;
 
-    public void init() {
+    public String getName() {
+        return this.name;
+    }
+
+    public Cell setName(String name) {
+        this.name = name;
+        return this;
     }
 
     public Cell setValue(String value) {
@@ -130,4 +137,3 @@ public class Cell implements Serializable {
     }
 
 }
-
