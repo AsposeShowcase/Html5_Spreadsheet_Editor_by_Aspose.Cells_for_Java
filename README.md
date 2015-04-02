@@ -2,7 +2,7 @@
 
 Html5 Spreadsheet Editor is a web application that can view and edit spreadsheet documents in a web browser. It supports Excel, SpreadsheetML, CSV, OpenDocument and many other formats supported by Microsoft Excel. All basic features including cell editing, formatting, formula editing, row and column management etc. are supported.
 
-![](http://i.imgur.com/aoWCRc1.png)
+![HTML5 Spreadsheet Editor](http://i.imgur.com/K79yltf.png)
 
 HTML5 Spreadsheet Editor uses many features of Aspose.Cells for Java and shows how to use them to create, manipulate and render a spreadsheet in your Java application.
 
@@ -16,5 +16,5 @@ Detailed [documentation](http://www.aspose.com/docs/display/cellsjava/1.1.1+Intr
 
 ### Getting Support and Contributing
 
-Developers, who want to contribute, can send pull requests, report bugs and propose features. For more information about contribution, checkout our documenation for [contributors](http://www.aspose.com/docs/display/cellsjava/1.1.5+Contribute) and [getting support](http://www.aspose.com/docs/display/cellsjava/1.1.4+Support).
+Developers, who want to contribute, can send pull requests, report bugs and propose features. For more information, checkout our documenation for [contributors](http://www.aspose.com/docs/display/cellsjava/1.1.5+Contribute) and [getting support](http://www.aspose.com/docs/display/cellsjava/1.1.4+Support).
 
