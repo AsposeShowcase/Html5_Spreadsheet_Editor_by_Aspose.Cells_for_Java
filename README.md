@@ -1,3 +1,7 @@
+# Project Moved
+
+This project has been moved to [asposecells/Aspose_Cells_Java](https://github.com/asposecells/Aspose_Cells_Java) repository at **v1.6.0** tag. Future changes will be pushed to the new location.
+
 ## HTML5 Spreadsheet Editor by Aspose.Cells for Java v1.6
 
 Html5 Spreadsheet Editor is a web application that can view and edit spreadsheet documents in a web browser. It supports Excel, SpreadsheetML, CSV, OpenDocument and many other formats supported by Microsoft Excel. All basic features including cell editing, formatting, formula editing, row and column management etc. are supported.
